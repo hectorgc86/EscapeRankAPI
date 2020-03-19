@@ -1,0 +1,24 @@
+﻿<Properties StartupConfiguration="{558E383A-5A7B-4231-92B6-DA82FADDE74D}|ApiEscape">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ApiEscapeRank/Controllers/LoginController.cs">
+    <Files>
+      <File FileName="ApiEscapeRank/Models/MySQLDbContext.cs" Line="666" Column="40" />
+      <File FileName="ApiEscapeRank/Models/Sala.cs" Line="20" Column="50" />
+      <File FileName="ApiEscapeRank/Controllers/SalasController.cs" Line="48" Column="71" />
+      <File FileName="ApiEscapeRank/Controllers/LoginController.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="ApiEscapeRank" expanded="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.ApiEscapeRank PreferredExecutionTarget="/Applications/Safari.app" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
