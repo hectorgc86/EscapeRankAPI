@@ -1,15 +1,25 @@
-﻿<Properties StartupConfiguration="{558E383A-5A7B-4231-92B6-DA82FADDE74D}|ApiEscape">
-  <MonoDevelop.Ide.Workbench ActiveDocument="ApiEscapeRank/Controllers/LoginController.cs">
+﻿<Properties StartupConfiguration="{8E920263-834C-481F-A5E1-752F212BFA61}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ApiEscapeRank/Controladores/UsuariosController.cs">
     <Files>
-      <File FileName="ApiEscapeRank/Models/MySQLDbContext.cs" Line="666" Column="40" />
-      <File FileName="ApiEscapeRank/Models/Sala.cs" Line="20" Column="50" />
-      <File FileName="ApiEscapeRank/Controllers/SalasController.cs" Line="48" Column="71" />
-      <File FileName="ApiEscapeRank/Controllers/LoginController.cs" Line="1" Column="1" />
+      <File FileName="ApiEscapeRank/Controladores/CategoriasController.cs" Line="19" Column="10" />
+      <File FileName="ApiEscapeRank/Controladores/CiudadesController.cs" Line="1" Column="1" />
+      <File FileName="ApiEscapeRank/Controladores/CompanyiasController.cs" Line="1" Column="1" />
+      <File FileName="ApiEscapeRank/Controladores/EquiposController.cs" Line="1" Column="1" />
+      <File FileName="ApiEscapeRank/Controladores/ProvinciasController.cs" Line="27" Column="1" />
+      <File FileName="ApiEscapeRank/Controladores/LoginController.cs" Line="1" Column="1" />
+      <File FileName="ApiEscapeRank/Controladores/NoticiasController.cs" Line="1" Column="1" />
+      <File FileName="ApiEscapeRank/Controladores/UsuariosController.cs" Line="162" Column="34" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="ApiEscapeRank" expanded="True" />
+          <Node name="ApiEscapeRank" expanded="True">
+            <Node name="ApiEscapeRank" expanded="True">
+              <Node name="Controladores" expanded="True">
+                <Node name="UsuariosController.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>

@@ -1,4 +1,5 @@
 using System.Text;
+using ApiEscapeRank.Modelos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -49,13 +50,6 @@ namespace ApiEscapeRank
                     ValidateAudience = false
                 };
             });
-
-            /*
-              services.AddAuthentication().AddFacebook(facebookOptions => {
-                   facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                   facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-               });
-            */
         }
  
         public void Configure(IApplicationBuilder app)
