@@ -42,8 +42,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // PUT: api/companyias/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCompanyia(string id, Companyia companyias)
         {

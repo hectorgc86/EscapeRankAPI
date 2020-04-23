@@ -40,8 +40,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // PUT: api/Tematicas/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTematica(string id, Tematica tematica)
         {
@@ -72,8 +70,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // POST: api/Tematicas
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Tematica>> PostTematica(Tematica tematica)
         {

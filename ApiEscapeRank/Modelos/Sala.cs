@@ -1,18 +1,10 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ApiEscapeRank.Modelos
 {
     public partial class Sala
     {
-        public Sala()
-        {
-            Partidas = new HashSet<Partida>();
-            SalasCategorias = new HashSet<SalasCategorias>();
-            SalasPublico = new HashSet<SalasPublico>();
-            SalasTematicas = new HashSet<SalasTematicas>();
-            Valoraciones = new HashSet<Valoracion>();
-        }
-
         public string Id { get; set; }
         public string Nombre { get; set; }
         public int Promocionada { get; set; }
@@ -57,5 +49,14 @@ namespace ApiEscapeRank.Modelos
         public virtual ICollection<SalasPublico> SalasPublico { get; set; }
         public virtual ICollection<SalasTematicas> SalasTematicas { get; set; }
         public virtual ICollection<Valoracion> Valoraciones { get; set; }
+
+        public Sala()
+        {
+            Partidas = new HashSet<Partida>();
+            SalasCategorias = new HashSet<SalasCategorias>();
+            SalasPublico = new HashSet<SalasPublico>();
+            SalasTematicas = new HashSet<SalasTematicas>();
+            Valoraciones = new HashSet<Valoracion>();
+        }
     }
 }

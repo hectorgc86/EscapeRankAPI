@@ -25,6 +25,27 @@ namespace ApiEscapeRank.Controladores
             return await _contexto.Noticias.ToListAsync();
         }
 
+        // GET: api/noticias/usuario/5
+        [HttpGet("usuario/{id}")]
+        public async Task<ActionResult<List<Noticia>>> GetNoticiasUsuario(int id)
+        {
+            string consulta = "SELECT * FROM noticias WHERE usuario_id" +
+                " IN(SELECT amigo_id FROM usuarios_amigos WHERE usuario_id = " + id + ")" +
+                " OR noticias.promocionada = 1" +
+                " OR noticias.usuario_id = " + id + " ORDER by noticias.fecha DESC";
+
+            List<Noticia> noticias = await _contexto.Noticias.FromSqlRaw(consulta).ToListAsync();
+
+            if (noticias == null)
+            {
+                return NotFound("No se encuentran noticias para usuario con id " + id);
+            }
+            else
+            {
+                return noticias;
+            }
+        }
+
         // GET: api/noticias/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Noticia>> GetNoticia(int id)

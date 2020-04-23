@@ -20,7 +20,7 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/provincias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Provincia>>> GetProvincias()
+        public async Task<ActionResult<List<Provincia>>> GetProvincias()
         {
             return await _contexto.Provincias.ToListAsync();
         }
@@ -40,8 +40,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // PUT: api/Provincias/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProvincia(string id, Provincia provincia)
         {
@@ -72,8 +70,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // POST: api/Provincias
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Provincia>> PostProvincia(Provincia provincia)
         {

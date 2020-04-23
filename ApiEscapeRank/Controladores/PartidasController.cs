@@ -20,9 +20,65 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/partidas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Partida>>> GetPartidas()
+        public async Task<ActionResult<List<Partida>>> GetPartidas()
         {
             return await _contexto.Partidas.ToListAsync();
+        }
+
+        // GET: api/partidas/usuario/5
+        [HttpGet("usuario/{id}")]
+        public async Task<ActionResult<List<Partida>>> GetPartidasUsuario(int id)
+        {
+            string sqlString = "SELECT * from partidas WHERE equipo_id IN (SELECT equipo_id FROM equipos_usuarios WHERE usuario_id = "+ id +")";
+
+            List<Partida> partidasUsuario = await _contexto.Partidas.FromSqlRaw(sqlString)
+                .Include(s=>s.Sala)
+                .Include(e=>e.Equipo)
+                .ToListAsync();
+
+            if (partidasUsuario == null)
+            {
+                return NotFound();
+            }
+
+            return partidasUsuario;
+        }
+
+        // GET: api/partidas/equipo/5
+        [HttpGet("equipo/{id}")]
+        public async Task<ActionResult<List<Partida>>> GetPartidasEquipo(int id)
+        {
+            List<Partida> partidasEquipo = await _contexto.Partidas
+                .Where(ei => ei.EquipoId == id)
+                .Include(s => s.Sala)
+                .ToListAsync();
+
+            if (partidasEquipo == null)
+            {
+                return NotFound();
+            }
+
+            return partidasEquipo;
+        }
+
+        // GET: api/partidas/sala/5
+        [HttpGet("sala/{id}")]
+        public async Task<ActionResult<List<Partida>>> GetPartidasSala(string id)
+        {
+            string sqlString = "SELECT * FROM partidas WHERE sala_id = '" + id + "'";
+
+            List<Partida> partidasSala = await _contexto.Partidas
+                .Where(si=>si.SalaId == id)
+                .Include(s => s.Sala)
+                .Include(e=>e.Equipo)
+                .ToListAsync();
+
+            if (partidasSala == null)
+            {
+                return NotFound();
+            }
+
+            return partidasSala;
         }
 
         // GET: api/partidas/5
@@ -40,8 +96,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // PUT: api/partidas/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPartida(int id, Partida partida)
         {
@@ -72,8 +126,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // POST: api/partidas
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Partida>> PostPartida(Partida partida)
         {

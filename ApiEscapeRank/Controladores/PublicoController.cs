@@ -20,7 +20,7 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/Publico
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Publico>>> GetPublico()
+        public async Task<ActionResult<List<Publico>>> GetPublico()
         {
             return await _contexto.Publico.ToListAsync();
         }
@@ -40,8 +40,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // PUT: api/Publico/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPublico(string id, Publico publico)
         {
@@ -72,8 +70,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // POST: api/Publico
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Publico>> PostPublico(Publico publico)
         {

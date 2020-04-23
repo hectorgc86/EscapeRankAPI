@@ -59,6 +59,10 @@ namespace ApiEscapeRank.Modelos
                     .HasColumnType("varchar(45)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.NumeroSalas)
+                   .HasColumnName("numero_salas")
+                   .HasColumnType("int");
             });
 
             modelBuilder.Entity<Ciudad>(entity =>

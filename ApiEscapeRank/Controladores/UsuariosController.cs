@@ -25,11 +25,28 @@ namespace ApiEscapeRank.Controladores
             return await _contexto.Usuarios.Include(p => p.Perfil).ToListAsync();
         }
 
+        // GET: api/usuarios/equipo/5
+        [HttpGet("equipo/{id}")]
+        public async Task<ActionResult<List<Usuario>>> GetUsuariosEquipo(int id)
+        {
+            string sqlString = "SELECT * FROM usuarios WHERE id IN (SELECT usuario_id FROM equipos_usuarios WHERE equipo_id = " + id +")";
+
+            List<Usuario> usuariosEquipo = await _contexto.Usuarios.FromSqlRaw(sqlString).ToListAsync();
+
+            if (usuariosEquipo == null)
+            {
+                return NotFound();
+            }
+
+            return usuariosEquipo;
+        }
+
         // GET: api/usuarios/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
-            Usuario usuario = await _contexto.Usuarios.Include(p => p.Perfil)
+            Usuario usuario = await _contexto.Usuarios
+                .Include(p => p.Perfil)
                 .FirstOrDefaultAsync(i => i.Id == id);
 
             if (usuario == null)
@@ -38,30 +55,10 @@ namespace ApiEscapeRank.Controladores
             }
             else
             {
-                return Ok(usuario);
+                return usuario;
             } 
         }
 
-        // GET: api/usuarios/5/noticias
-        [HttpGet("{id}/noticias")]
-        public async Task<ActionResult<List<Noticia>>> GetNoticiasUsuario(int id)
-        {
-            string consulta = "SELECT * FROM noticias WHERE usuario_id" +
-                " IN(SELECT amigo_id FROM usuarios_amigos WHERE usuario_id = "+ id + ")"+
-                " OR noticias.promocionada = 1" +
-                " OR noticias.usuario_id = "+ id + " ORDER by noticias.fecha DESC";
-
-            List<Noticia> noticias = await _contexto.Noticias.FromSqlRaw(consulta).ToListAsync();
-
-            if (noticias == null)
-            {
-                return NotFound("No se encuentran noticias para usuario con id " + id);
-            }
-            else
-            {
-                return Ok(noticias);
-            }   
-        }
 
         // GET: api/usuarios/5/amigos
         [HttpGet("{id}/amigos")]
@@ -70,7 +67,9 @@ namespace ApiEscapeRank.Controladores
             string consulta = "SELECT * FROM usuarios WHERE id" +
                 " IN(SELECT amigo_id FROM usuarios_amigos WHERE usuario_id = " + id + ")";
 
-            List<Usuario> amigos = await _contexto.Usuarios.FromSqlRaw(consulta).Include(p => p.Perfil).ToListAsync();
+            List<Usuario> amigos = await _contexto.Usuarios.FromSqlRaw(consulta)
+                .Include(p => p.Perfil)
+                .ToListAsync();
 
             if (amigos == null)
             {
@@ -78,46 +77,10 @@ namespace ApiEscapeRank.Controladores
             }
             else
             {
-                return Ok(amigos);
+                return amigos;
             }
         }
 
-        // GET: api/usuarios/5/equipos
-        [HttpGet("{id}/equipos")]
-        public async Task<ActionResult<List<Equipo>>> GetEquiposUsuario(int id)
-        {
-            string consulta = "SELECT * FROM equipos WHERE id" +
-                " IN(SELECT equipo_id FROM equipos_usuarios WHERE usuario_id = " + id + ")";
-
-            List<Equipo> equipos = await _contexto.Equipos.FromSqlRaw(consulta).ToListAsync();
-
-            if (equipos == null)
-            {
-                return NotFound("No se encuentran equipos para usuario con id " + id);
-            }
-            else
-            {
-                return Ok(equipos);
-            }
-        }
-
-        // GET: api/usuarios/5/perfil
-        [HttpGet("{id}/perfil")]
-        public async Task<ActionResult<Perfil>> GetPerfilUsuario(int id)
-        {
-            string consulta = "SELECT * FROM perfiles WHERE usuario_id = " + id;
-
-            Perfil perfil = await _contexto.Perfiles.FromSqlRaw(consulta).FirstAsync();
-
-            if (perfil == null)
-            {
-                return NotFound("No se encuentra perfil para usuario con id " + id);
-            }
-            else
-            {
-                return Ok(perfil);
-            }
-        }
 
         // PUT: api/Usuarios/5
         [HttpPut("{id}")]
@@ -149,7 +112,7 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/Usuarios
+        // POST: api/usuarios
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
@@ -159,7 +122,7 @@ namespace ApiEscapeRank.Controladores
             return CreatedAtAction("GetUsuarios", new { id = usuario.Id }, usuario);
         }
 
-        // DELETE: api/Usuarios/5
+        // DELETE: api/usuarios/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Usuario>> DeleteUsuario(int id)
         {

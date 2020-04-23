@@ -5,6 +5,12 @@
     <RootNamespace>ApiEscapeRank</RootNamespace>
     <UserSecretsId>c40a5d54-b0d5-4720-9255-2634e021000e</UserSecretsId>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'default' ">
+    <StartAction>Project</StartAction>
+    <LaunchBrowser></LaunchBrowser>
+    <LaunchUrl>api/values</LaunchUrl>
+    <ApplicationURL>http://192.168.0.18:5000</ApplicationURL>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App">
       <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>

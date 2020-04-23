@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.Json.Serialization;
 
 namespace ApiEscapeRank.Modelos
 {
@@ -12,12 +11,9 @@ namespace ApiEscapeRank.Modelos
         public int? PartidasGanadas { get; set; }
         public int? PartidasPerdidas { get; set; }
         public DateTime? MejorTiempo { get; set; }
-       
-
-        [JsonIgnore]
         public int UsuarioId { get; set; }
 
-        [JsonIgnore]
         public virtual Usuario Usuario { get; set; }
+
     }
 }

@@ -10,7 +10,7 @@ namespace ApiEscapeRank.Controladores
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PerfilesController : ControllerBase, IPerfilesService
+    public class PerfilesController : ControllerBase
     {
         private readonly MySQLDbcontext _contexto;
 
@@ -21,9 +21,27 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/perfiles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Perfil>>> GetPerfiles()
+        public async Task<ActionResult<List<Perfil>>> GetPerfiles()
         {
             return await _contexto.Perfiles.ToListAsync();
+        }
+
+        // GET: api/perfiles/usuario/5/
+        [HttpGet("usuario/{id}")]
+        public async Task<ActionResult<Perfil>> GetPerfilUsuario(int id)
+        {
+            Perfil perfil = await _contexto.Perfiles
+                .Where(ui=>ui.UsuarioId == id)
+                .FirstAsync();
+
+            if (perfil == null)
+            {
+                return NotFound("No se encuentra perfil para usuario con id " + id);
+            }
+            else
+            {
+                return perfil;
+            }
         }
 
         // GET: api/perfiles/5
@@ -41,8 +59,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // PUT: api/perfiles/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPerfil(int id, Perfil perfil)
         {
@@ -73,8 +89,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // POST: api/perfiles
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Perfil>> PostPerfil(Perfil perfil)
         {

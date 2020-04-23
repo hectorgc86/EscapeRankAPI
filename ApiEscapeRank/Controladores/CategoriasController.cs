@@ -20,9 +20,15 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/categorias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categoria>>> GetCategorias()
+        public async Task<ActionResult<IEnumerable<Categoria>>> GetCategorias([FromQuery]string ciudad=null)
         {
-            return await _contexto.Categorias.ToListAsync();
+            var sqlString = "SELECT id ,tipo, COUNT(*) numero_salas FROM categorias, salas_categorias WHERE categorias.id = salas_categorias.categoria_id GROUP BY id, tipo";
+
+            List<Categoria> result = await _contexto.Categorias.FromSqlRaw(sqlString).ToListAsync();
+
+            //Categorias.FromSqlRaw(sqlString).ToListAsync();
+
+            return result;
         }
 
         // GET: api/categorias/5
@@ -40,8 +46,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // PUT: api/categorias/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCategoria(string id, Categoria categoria)
         {
@@ -72,8 +76,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // POST: api/categorias
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
         {

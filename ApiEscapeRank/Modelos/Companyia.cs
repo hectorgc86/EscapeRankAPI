@@ -5,11 +5,6 @@ namespace ApiEscapeRank.Modelos
 {
     public partial class Companyia
     {
-        public Companyia()
-        {
-            Noticias = new HashSet<Noticia>();
-            Salas = new HashSet<Sala>();
-        }
 
         public string Id { get; set; }
         public string Nombre { get; set; }
@@ -32,8 +27,12 @@ namespace ApiEscapeRank.Modelos
 
         public virtual Ciudad Ciudad { get; set; }
         public virtual ICollection<Noticia> Noticias { get; set; }
-
-        [JsonIgnore]
         public virtual ICollection<Sala> Salas { get; set; }
+
+        public Companyia()
+        {
+            Noticias = new HashSet<Noticia>();
+            Salas = new HashSet<Sala>();
+        }
     }
 }

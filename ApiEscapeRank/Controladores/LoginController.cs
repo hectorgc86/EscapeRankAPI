@@ -30,11 +30,11 @@ namespace ApiEscapeRank.Controladores
         // POST: api/login
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Autenticar([FromBody]Login login)
+        public IActionResult Autenticar([FromBody]Request req)
         {
             DbSet<Usuario> usuarios = _contexto.Usuarios;
         
-            Usuario usuario = usuarios.SingleOrDefault(x => x.Email == login.Email && x.Contrasenya == login.Contrasenya);
+            Usuario usuario = usuarios.SingleOrDefault(x => x.Email == req.Email && x.Contrasenya == req.Contrasenya);
 
             Login resp = new Login();
 

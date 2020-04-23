@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ApiEscapeRank.Interfaces;
 using ApiEscapeRank.Modelos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,7 @@ namespace ApiEscapeRank.Controladores
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EquiposController : ControllerBase, IEquiposService
+    public class EquiposController : ControllerBase
     {
         private readonly MySQLDbcontext _contexto;
 
@@ -21,16 +20,35 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/equipos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Equipo>>> GetEquipos()
+        public async Task<ActionResult<List<Equipo>>> GetEquipos()
         {
             return await _contexto.Equipos.ToListAsync();
+        }
+
+        // GET: api/equipos/usuario/5
+        [HttpGet("usuario/{id}")]
+        public async Task<ActionResult<List<Equipo>>> GetEquiposUsuario(int id)
+        {
+            string consulta = "SELECT * FROM equipos WHERE id" +
+                " IN(SELECT equipo_id FROM equipos_usuarios WHERE usuario_id = " + id + ")";
+
+            List<Equipo> equipos = await _contexto.Equipos.FromSqlRaw(consulta).ToListAsync();
+
+            if (equipos == null)
+            {
+                return NotFound("No se encuentran equipos para usuario con id " + id);
+            }
+            else
+            {
+                return equipos;
+            }
         }
 
         // GET: api/equipos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Equipo>> GetEquipo(int id)
         {
-            var equipo = await _contexto.Equipos.FindAsync(id);
+            Equipo equipo = await _contexto.Equipos.FirstOrDefaultAsync(i => i.Id == id);
 
             if (equipo == null)
             {
@@ -41,8 +59,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // PUT: api/equipos/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEquipo(int id, Equipo equipo)
         {
@@ -73,8 +89,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // POST: api/equipos
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Equipo>> PostEquipo(Equipo equipo)
         {

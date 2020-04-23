@@ -22,7 +22,7 @@ namespace ApiEscapeRank.Controladores
         [HttpGet]
         public async Task<ActionResult<List<Sala>>> GetSalas()
         {
-            return await _contexto.Salas.Include(c=> c.Companyia).ToListAsync();
+            return await _contexto.Salas.ToListAsync();
         }
 
    
@@ -30,39 +30,133 @@ namespace ApiEscapeRank.Controladores
         [HttpGet("conjunto/{offset}")]
         public async Task<ActionResult<List<Sala>>> GetConjuntoSalas(int offset)
         {
-            string sqlString = "SELECT * FROM salas LIMIT 10 OFFSET " + offset;
+            List<Sala> salasConjunto = await _contexto.Salas
+                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+                .Take(10)
+                .Skip(offset)
+                .ToListAsync();
 
-            List<Sala> salas = await _contexto.Salas.FromSqlRaw(sqlString).Include(c => c.Companyia).ToListAsync();
-
-            if (salas == null)
+            if (salasConjunto == null)
             {
                 return NotFound();
             }
 
-            return Ok(salas);
+            return salasConjunto;
         }
 
         // GET: api/salas/promocionadas/5
         [HttpGet("promocionadas/{offset}")]
         public async Task<ActionResult<List<Sala>>> GetSalasPromocionadas(int offset)
         {
-            string sqlString = "SELECT * FROM salas WHERE promocionada = true LIMIT 10 OFFSET " + offset;
+            List<Sala> salasPromocionadas = await _contexto.Salas.Where(p=>p.Promocionada == 1)
+                .Include(c => c.Companyia).ThenInclude(ci=>ci.Ciudad)
+                .Take(10)
+                .Skip(offset)
+                .ToListAsync();
 
-            List<Sala> salas = await _contexto.Salas.FromSqlRaw(sqlString).Include(c => c.Companyia).ToListAsync();
-
-            if (salas == null)
+            if (salasPromocionadas == null)
             {
                 return NotFound();
             }
 
-            return Ok(salas);
+            return salasPromocionadas;
+        }
+
+        // GET: api/salas/provincia/5
+        [HttpGet("provincia/{id}")]
+        public async Task<ActionResult<List<Sala>>> GetSalasProvincia(string id)
+        {
+            List<Sala> salasProvincia = await _contexto.Salas
+                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+                .Where(pi => pi.Companyia.Ciudad.ProvinciaId == id)
+                .ToListAsync();
+
+            if (salasProvincia == null)
+            {
+                return NotFound();
+            }
+
+            return salasProvincia;
+        }
+
+        // GET: api/salas/categoria/5
+        [HttpGet("categoria/{id}")]
+        public async Task<ActionResult<List<Sala>>> GetSalasCategoria(string id)
+        {
+            List<Sala> salasCategoria = await _contexto.Salas
+                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+                .Where(p => p.SalasCategorias.Any(c => c.CategoriaId == id))
+                .ToListAsync();
+
+            if (salasCategoria == null)
+            {
+                return NotFound();
+            }
+
+            return salasCategoria;
+        }
+
+        // GET: api/salas/tematica/5
+        [HttpGet("tematica/{id}")]
+        public async Task<ActionResult<List<Sala>>> GetSalasTematica(string id)
+        {
+            List<Sala> salasTematica = await _contexto.Salas
+                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+                .Where(p => p.SalasTematicas.Any(t => t.TematicaId == id))
+                .ToListAsync();
+
+            if (salasTematica == null)
+            {
+                return NotFound();
+            }
+
+            return salasTematica;
+        }
+
+        // GET: api/salas/publico/5
+        [HttpGet("publico/{id}")]
+        public async Task<ActionResult<List<Sala>>> GetSalasPublico(string id)
+        {
+            List<Sala> salasPublico = await _contexto.Salas
+                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+                .Where(p => p.SalasPublico.Any(c => c.PublicoId == id))
+                .ToListAsync();
+
+            if (salasPublico == null)
+            {
+                return NotFound();
+            }
+
+            return salasPublico;
+        }
+
+        // GET: api/salas/dificultad/5
+        [HttpGet("dificultad/{id}")]
+        public async Task<ActionResult<List<Sala>>> GetSalasDificultad(string id)
+        {
+            List<Sala> salasDificultad = await _contexto.Salas
+                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+                .Where(d => d.DificultadId == id)
+                .ToListAsync();
+
+            if (salasDificultad == null)
+            {
+                return NotFound();
+            }
+
+            return salasDificultad;
         }
 
         // GET: api/salas/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Sala>> GetSala(string id)
         {
-            var sala = await _contexto.Salas.Include(c => c.Companyia)
+            var sala = await _contexto.Salas
+                .Include(e=>e.Dificultad)
+                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+                .Include(sc => sc.SalasCategorias).ThenInclude(s=>s.Categoria)
+                .Include(st => st.SalasTematicas).ThenInclude(t=>t.Tematica)
+                .Include(sp => sp.SalasPublico).ThenInclude(p=>p.Publico)
                 .FirstOrDefaultAsync(i=>i.Id == id);
 
             if (sala == null)

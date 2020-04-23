@@ -4,11 +4,6 @@ namespace ApiEscapeRank.Modelos
 {
     public partial class Ciudad
     {
-        public Ciudad()
-        {
-            Companyias = new HashSet<Companyia>();
-        }
-
         public string Id { get; set; }
         public string Nombre { get; set; }
         public string CiudadOrigen { get; set; }
@@ -18,5 +13,10 @@ namespace ApiEscapeRank.Modelos
 
         public virtual Provincia Provincia { get; set; }
         public virtual ICollection<Companyia> Companyias { get; set; }
+
+        public Ciudad()
+        {
+            Companyias = new HashSet<Companyia>();
+        }
     }
 }
