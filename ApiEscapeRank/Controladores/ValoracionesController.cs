@@ -18,14 +18,14 @@ namespace ApiEscapeRank.Controladores
             _contexto = contexto;
         }
 
-        // GET: api/Valoraciones
+        // GET: api/valoraciones
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Valoracion>>> GetValoraciones()
         {
             return await _contexto.Valoraciones.ToListAsync();
         }
 
-        // GET: api/Valoraciones/5
+        // GET: api/valoraciones/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Valoracion>> GetValoracion(int id)
         {
@@ -39,7 +39,7 @@ namespace ApiEscapeRank.Controladores
             return valoracion;
         }
 
-        // PUT: api/Valoraciones/5
+        // PUT: api/valoraciones/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutValoracion(int id, Valoracion valoracion)
         {
@@ -69,7 +69,7 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/Valoraciones
+        // POST: api/valoraciones
         [HttpPost]
         public async Task<ActionResult<Valoracion>> PostValoracion(Valoracion valoracion)
         {
@@ -79,7 +79,7 @@ namespace ApiEscapeRank.Controladores
             return CreatedAtAction("GetValoraciones", new { id = valoracion.Id }, valoracion);
         }
 
-        // DELETE: api/Valoraciones/5
+        // DELETE: api/valoraciones/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Valoracion>> DeleteValoracion(int id)
         {

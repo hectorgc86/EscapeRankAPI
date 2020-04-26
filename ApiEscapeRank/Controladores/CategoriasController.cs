@@ -22,13 +22,15 @@ namespace ApiEscapeRank.Controladores
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Categoria>>> GetCategorias([FromQuery]string ciudad=null)
         {
-            var sqlString = "SELECT id ,tipo, COUNT(*) numero_salas FROM categorias, salas_categorias WHERE categorias.id = salas_categorias.categoria_id GROUP BY id, tipo";
+            string sqlString = "SELECT id ,tipo, COUNT(*) numero_salas " +
+                "FROM categorias, salas_categorias " +
+                "WHERE categorias.id = salas_categorias.categoria_id " +
+                "GROUP BY id, tipo " +
+                "ORDER BY numero_salas DESC";
 
-            List<Categoria> result = await _contexto.Categorias.FromSqlRaw(sqlString).ToListAsync();
+            List<Categoria> categorias = await _contexto.Categorias.FromSqlRaw(sqlString).ToListAsync();
 
-            //Categorias.FromSqlRaw(sqlString).ToListAsync();
-
-            return result;
+            return categorias;
         }
 
         // GET: api/categorias/5

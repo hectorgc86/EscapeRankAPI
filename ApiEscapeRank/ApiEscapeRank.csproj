@@ -7,6 +7,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'default' ">
     <StartAction>Project</StartAction>
+    <ConsolePause>false</ConsolePause>
     <LaunchBrowser></LaunchBrowser>
     <LaunchUrl>api/values</LaunchUrl>
     <ApplicationURL>http://192.168.0.18:5000</ApplicationURL>

@@ -20,38 +20,46 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/salas
         [HttpGet]
-        public async Task<ActionResult<List<Sala>>> GetSalas()
+        public async Task<ActionResult<List<Sala>>> GetSalas([FromQuery]int offset,[FromQuery]string busqueda)
         {
-            return await _contexto.Salas.ToListAsync();
-        }
+            List<Sala> salas;
 
-   
-        // GET: api/salas/conjunto/5
-        [HttpGet("conjunto/{offset}")]
-        public async Task<ActionResult<List<Sala>>> GetConjuntoSalas(int offset)
-        {
-            List<Sala> salasConjunto = await _contexto.Salas
+            if (string.IsNullOrEmpty(busqueda))
+            {
+                salas = await _contexto.Salas
                 .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Take(10)
                 .Skip(offset)
+                .Take(10)
                 .ToListAsync();
+            }
+            else
+            {
+                salas = await _contexto.Salas
+                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+                .Where(s=>s.Nombre.ToLower().Contains(busqueda.ToLower()) ||
+                s.Companyia.Ciudad.Nombre.ToLower().Contains(busqueda.ToLower()) ||
+                s.Companyia.Nombre.ToLower().Contains(busqueda.ToLower()))
+                .Skip(offset)
+                .Take(10)
+                .ToListAsync();
+            }
 
-            if (salasConjunto == null)
+            if (salas == null)
             {
                 return NotFound();
             }
 
-            return salasConjunto;
+            return salas;
         }
 
-        // GET: api/salas/promocionadas/5
-        [HttpGet("promocionadas/{offset}")]
-        public async Task<ActionResult<List<Sala>>> GetSalasPromocionadas(int offset)
+        // GET: api/salas/promocionadas
+        [HttpGet("promocionadas")]
+        public async Task<ActionResult<List<Sala>>> GetSalasPromocionadas([FromQuery]int offset)
         {
             List<Sala> salasPromocionadas = await _contexto.Salas.Where(p=>p.Promocionada == 1)
                 .Include(c => c.Companyia).ThenInclude(ci=>ci.Ciudad)
-                .Take(10)
                 .Skip(offset)
+                .Take(10)
                 .ToListAsync();
 
             if (salasPromocionadas == null)
@@ -62,31 +70,33 @@ namespace ApiEscapeRank.Controladores
             return salasPromocionadas;
         }
 
-        // GET: api/salas/provincia/5
-        [HttpGet("provincia/{id}")]
-        public async Task<ActionResult<List<Sala>>> GetSalasProvincia(string id)
-        {
-            List<Sala> salasProvincia = await _contexto.Salas
-                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Where(pi => pi.Companyia.Ciudad.ProvinciaId == id)
-                .ToListAsync();
-
-            if (salasProvincia == null)
-            {
-                return NotFound();
-            }
-
-            return salasProvincia;
-        }
-
         // GET: api/salas/categoria/5
         [HttpGet("categoria/{id}")]
-        public async Task<ActionResult<List<Sala>>> GetSalasCategoria(string id)
+        public async Task<ActionResult<List<Sala>>> GetSalasCategoria(string id,[FromQuery]int offset,[FromQuery]string busqueda)
         {
-            List<Sala> salasCategoria = await _contexto.Salas
+            List<Sala> salasCategoria;
+
+            if (string.IsNullOrEmpty(busqueda))
+            {
+                salasCategoria = await _contexto.Salas
                 .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Where(p => p.SalasCategorias.Any(c => c.CategoriaId == id))
+                .Where(s => s.SalasCategorias.Any(c => c.CategoriaId == id))
+                .Skip(offset)
+                .Take(10)
                 .ToListAsync();
+            }
+            else
+            {
+                salasCategoria = await _contexto.Salas
+               .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+               .Where(s => s.SalasCategorias.Any(c=> c.CategoriaId == id) &&
+               s.Nombre.ToLower().Contains(busqueda.ToLower()) ||
+               s.Companyia.Ciudad.Nombre.ToLower().Contains(busqueda.ToLower()) ||
+               s.Companyia.Nombre.ToLower().Contains(busqueda.ToLower()))
+               .Skip(offset)
+               .Take(10)
+               .ToListAsync();
+            }
 
             if (salasCategoria == null)
             {
@@ -98,14 +108,33 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/salas/tematica/5
         [HttpGet("tematica/{id}")]
-        public async Task<ActionResult<List<Sala>>> GetSalasTematica(string id)
+        public async Task<ActionResult<List<Sala>>> GetSalasTematica(string id,[FromQuery]int offset,[FromQuery]string busqueda)
         {
-            List<Sala> salasTematica = await _contexto.Salas
+            List<Sala> salasTematica;
+
+            if (string.IsNullOrEmpty(busqueda))
+            {
+                salasTematica = await _contexto.Salas
                 .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
                 .Where(p => p.SalasTematicas.Any(t => t.TematicaId == id))
+                .Skip(offset)
+                .Take(10)
                 .ToListAsync();
-
-            if (salasTematica == null)
+            }
+            else
+            {
+                salasTematica = await _contexto.Salas
+                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+                .Where(s => s.SalasTematicas.Any(t => t.TematicaId == id) &&
+                s.Nombre.ToLower().Contains(busqueda.ToLower()) ||
+                s.Companyia.Ciudad.Nombre.ToLower().Contains(busqueda.ToLower()) ||
+                s.Companyia.Nombre.ToLower().Contains(busqueda.ToLower()))
+                .Skip(offset)
+                .Take(10)
+                .ToListAsync();
+                  
+            }
+                if (salasTematica == null)
             {
                 return NotFound();
             }
@@ -115,12 +144,31 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/salas/publico/5
         [HttpGet("publico/{id}")]
-        public async Task<ActionResult<List<Sala>>> GetSalasPublico(string id)
+        public async Task<ActionResult<List<Sala>>> GetSalasPublico(string id,[FromQuery]int offset,[FromQuery]string busqueda)
         {
-            List<Sala> salasPublico = await _contexto.Salas
+            List<Sala> salasPublico;
+
+            if (string.IsNullOrEmpty(busqueda))
+            {
+                salasPublico = await _contexto.Salas
                 .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
                 .Where(p => p.SalasPublico.Any(c => c.PublicoId == id))
+                .Skip(offset)
+                .Take(10)
                 .ToListAsync();
+            }
+            else
+            {
+                salasPublico = await _contexto.Salas
+               .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+               .Where(s => s.SalasPublico.Any(c => c.PublicoId == id) &&
+               s.Nombre.ToLower().Contains(busqueda.ToLower()) ||
+               s.Companyia.Ciudad.Nombre.ToLower().Contains(busqueda.ToLower()) ||
+               s.Companyia.Nombre.ToLower().Contains(busqueda.ToLower()))
+               .Skip(offset)
+               .Take(10)
+               .ToListAsync();
+            }
 
             if (salasPublico == null)
             {
@@ -132,12 +180,31 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/salas/dificultad/5
         [HttpGet("dificultad/{id}")]
-        public async Task<ActionResult<List<Sala>>> GetSalasDificultad(string id)
+        public async Task<ActionResult<List<Sala>>> GetSalasDificultad(string id,[FromQuery]int offset,[FromQuery]string busqueda)
         {
-            List<Sala> salasDificultad = await _contexto.Salas
+            List<Sala> salasDificultad;
+
+            if (string.IsNullOrEmpty(busqueda))
+            {
+                salasDificultad = await _contexto.Salas
                 .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
                 .Where(d => d.DificultadId == id)
+                .Skip(offset)
+                .Take(10)
                 .ToListAsync();
+            }
+            else
+            {
+                salasDificultad = await _contexto.Salas
+                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+                .Where(s => s.DificultadId == id &&
+                s.Nombre.ToLower().Contains(busqueda.ToLower()) ||
+                s.Companyia.Ciudad.Nombre.ToLower().Contains(busqueda.ToLower()) ||
+                s.Companyia.Nombre.ToLower().Contains(busqueda.ToLower()))
+                .Skip(offset)
+                .Take(10)
+                .ToListAsync();
+            }
 
             if (salasDificultad == null)
             {
@@ -145,6 +212,25 @@ namespace ApiEscapeRank.Controladores
             }
 
             return salasDificultad;
+        }
+
+        // GET: api/salas/provincia/5
+        [HttpGet("provincia/{id}")]
+        public async Task<ActionResult<List<Sala>>> GetSalasProvincia(string id,[FromQuery]int offset)
+        {
+            List<Sala> salasProvincia = await _contexto.Salas
+                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
+                .Where(pi => pi.Companyia.Ciudad.ProvinciaId == id)
+                .Skip(offset)
+                .Take(10)
+                .ToListAsync();
+
+            if (salasProvincia == null)
+            {
+                return NotFound();
+            }
+
+            return salasProvincia;
         }
 
         // GET: api/salas/5

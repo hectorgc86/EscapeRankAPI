@@ -6,6 +6,7 @@ namespace ApiEscapeRank.Modelos
     {
         public string Id { get; set; }
         public string Tipo { get; set; }
+        public int NumeroSalas { get; set; }
 
         public virtual ICollection<SalasPublico> SalasPublico { get; set; }
 

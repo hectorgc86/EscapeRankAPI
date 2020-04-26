@@ -22,7 +22,15 @@ namespace ApiEscapeRank.Controladores
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Tematica>>> GetTematicas()
         {
-            return await _contexto.Tematicas.ToListAsync();
+            string sqlString = "SELECT id ,tipo, COUNT(*) numero_salas " +
+                 "FROM tematicas, salas_tematicas " +
+                 "WHERE tematicas.id = salas_tematicas.tematica_id " +
+                 "GROUP BY id, tipo " +
+                 "ORDER BY numero_salas DESC";
+
+            List<Tematica> tematicas = await _contexto.Tematicas.FromSqlRaw(sqlString).ToListAsync();
+
+            return tematicas;
         }
 
         // GET: api/Tematicas/5

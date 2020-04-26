@@ -1,34 +1,21 @@
 ﻿<Properties StartupConfiguration="{8E920263-834C-481F-A5E1-752F212BFA61}|default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="ApiEscapeRank/Controladores/CategoriasController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ApiEscapeRank/Controladores/LoginController.cs">
     <Files>
-      <File FileName="ApiEscapeRank/Controladores/LoginController.cs" Line="37" Column="1" />
-      <File FileName="ApiEscapeRank/Properties/launchSettings.json" Line="3" Column="7" />
-      <File FileName="ApiEscapeRank/Modelos/Categoria.cs" Line="8" Column="39" />
-      <File FileName="ApiEscapeRank/Controladores/CategoriasController.cs" Line="27" Column="1" />
-      <File FileName="ApiEscapeRank/Controladores/SalasController.cs" Line="151" Column="26" />
-      <File FileName="ApiEscapeRank/Controladores/UsuariosController.cs" Line="32" Column="29" />
-      <File FileName="ApiEscapeRank/Modelos/MySQLDbContext.cs" Line="65" Column="42" />
-      <File FileName="ApiEscapeRank/Controladores/ValuesController.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/SalasCategorias.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/SalasTematicas.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/SalasPublico.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/Request.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/Companyia.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/Dificultad.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/Equipo.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/EquiposUsuarios.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/Noticia.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/Partida.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/Perfil.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/Provincia.cs" Line="1" Column="1" />
-      <File FileName="ApiEscapeRank/Modelos/Usuario.cs" Line="1" Column="1" />
+      <File FileName="ApiEscapeRank/Controladores/SalasController.cs" Line="289" Column="45" />
+      <File FileName="ApiEscapeRank/Controladores/LoginController.cs" Line="47" Column="1" />
+      <File FileName="ApiEscapeRank/Controladores/PartidasController.cs" Line="135" Column="85" />
+      <File FileName="ApiEscapeRank/Controladores/NoticiasController.cs" Line="1" Column="1" />
+      <File FileName="ApiEscapeRank/Modelos/Request.cs" Line="8" Column="43" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="ApiEscapeRank" expanded="True">
             <Node name="ApiEscapeRank" expanded="True">
-              <Node name="Controladores" selected="True" />
+              <Node name="Controladores" expanded="True">
+                <Node name="LoginController.cs" selected="True" />
+              </Node>
+              <Node name="Modelos" expanded="True" />
             </Node>
           </Node>
         </State>
@@ -39,9 +26,7 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.ApiEscapeRank PreferredExecutionTarget="/Applications/Safari.app" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/hectorgc86/DAM2/Proyecto final ciclo/ApiEscapeRank/ApiEscapeRank/Controladores/CategoriasController.cs" relfile="ApiEscapeRank/Controladores/CategoriasController.cs" line="27" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>
