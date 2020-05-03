@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using ApiEscapeRank.Modelos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,19 +23,18 @@ namespace ApiEscapeRank
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+            services.AddSingleton(Configuration);
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-            
-            AppSettings appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            string conexion = Configuration.GetSection("AppSettings").GetSection("Conexion").Value;
+            string secret = Configuration.GetSection("AppSettings").GetSection("Secret").Value;
 
-            services.AddDbContext<MySQLDbcontext>(opt =>
-            opt.UseMySql(appSettings.Conexion));
+            services.AddDbContext<MySQLDbcontext>(opt => opt.UseMySql(conexion));
+
+            byte[] key = Encoding.ASCII.GetBytes(secret);
 
             services.AddAuthentication(x =>
             {
@@ -43,15 +43,16 @@ namespace ApiEscapeRank
             })
             .AddJwtBearer(x =>
             {
-                x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
                 
                 x.TokenValidationParameters = new TokenValidationParameters
-                { 
+                {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ClockSkew = TimeSpan.Zero,
+                    ValidateLifetime = true
                 };
             });
         }

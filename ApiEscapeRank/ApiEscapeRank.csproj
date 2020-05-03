@@ -5,19 +5,8 @@
     <RootNamespace>ApiEscapeRank</RootNamespace>
     <UserSecretsId>c40a5d54-b0d5-4720-9255-2634e021000e</UserSecretsId>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'default' ">
-    <StartAction>Project</StartAction>
-    <ConsolePause>false</ConsolePause>
-    <LaunchBrowser></LaunchBrowser>
-    <LaunchUrl>api/values</LaunchUrl>
-    <ApplicationURL>http://192.168.0.18:5000</ApplicationURL>
-  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App">
-      <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
-      <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
-    </PackageReference>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3">

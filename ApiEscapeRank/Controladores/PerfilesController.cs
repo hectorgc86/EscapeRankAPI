@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ApiEscapeRank.Controladores
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PerfilesController : ControllerBase

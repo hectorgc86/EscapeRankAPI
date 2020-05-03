@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ApiEscapeRank.Modelos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiEscapeRank.Controladores
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SalasController : ControllerBase

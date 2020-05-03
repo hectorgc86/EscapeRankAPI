@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiEscapeRank.Modelos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiEscapeRank.Controladores
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PartidasController : ControllerBase
@@ -34,6 +36,7 @@ namespace ApiEscapeRank.Controladores
             List<Partida> partidasUsuario = await _contexto.Partidas.FromSqlRaw(sqlString)
                 .Include(s=>s.Sala)
                 .Include(e=>e.Equipo)
+                .OrderByDescending(f=>f.Fecha)
                 .ToListAsync();
 
             if (partidasUsuario == null)
@@ -127,12 +130,47 @@ namespace ApiEscapeRank.Controladores
 
         // POST: api/partidas
         [HttpPost]
-        public async Task<ActionResult<Partida>> PostPartida(Partida partida)
+        public async Task<ActionResult<bool>> PostPartida(PartidaRequest req)
         {
-            _contexto.Partidas.Add(partida);
-            await _contexto.SaveChangesAsync();
+            Partida partidaNueva = new Partida
+            {
+                Minutos = req.Minutos,
+                Segundos = req.Segundos,
+                SalaId = req.Sala.Id,
+                EquipoId = req.Equipo.Id,
+                Fecha = req.Fecha
+            };
 
-            return CreatedAtAction("GetPartidas", new { id = partida.Id }, partida);
+            _contexto.Partidas.Add(partidaNueva);
+
+            try
+            {
+                await _contexto.SaveChangesAsync();
+
+                Noticia n = new Noticia
+                {
+                    Titular = "Partida jugada en " + req.Sala.Nombre,
+                    TextoCorto = "Has jugado una partida con tu equipo: " + req.Equipo.Nombre,
+                    TextoLargo = "Sala realizada en un tiempo de " + partidaNueva.Minutos + " minutos con " + partidaNueva.Segundos + "segundos el día " + partidaNueva.Fecha +". El equipo de EscapeRank y de la sala " + req.Sala.Nombre + " te estamos muy agradecidos."
+                };
+
+                string sqlString = "SELECT * FROM usuarios WHERE id IN (SELECT usuario_id FROM equipos_usuarios WHERE equipo_id = " + partidaNueva.EquipoId + ")";
+
+                List<Usuario> usuariosEquipo = await _contexto.Usuarios.FromSqlRaw(sqlString).ToListAsync();
+
+                foreach(Usuario u in usuariosEquipo)
+                {
+                    u.Noticias.Add(n);
+                }
+
+                await _contexto.SaveChangesAsync();
+
+                return true;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         // DELETE: api/Partidas/5

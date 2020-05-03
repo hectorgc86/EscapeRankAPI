@@ -1,16 +1,12 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using ApiEscapeRank.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-
+using Microsoft.Extensions.Configuration;
 
 namespace ApiEscapeRank.Controladores
 {
@@ -20,22 +16,33 @@ namespace ApiEscapeRank.Controladores
     public class LoginController : ControllerBase
     {
         private readonly MySQLDbcontext _contexto;
-        private readonly AppSettings _appSettings;
+        private readonly IConfiguration Configuration;
 
-        public LoginController(IOptions<AppSettings> appSettings, MySQLDbcontext contexto)
+        public LoginController(MySQLDbcontext contexto, IConfiguration configuration)
         {
+            Configuration = configuration;
             _contexto = contexto;
-            _appSettings = appSettings.Value;
         }
 
         // POST: api/login
         [AllowAnonymous]
         [HttpPost("login")]
-        public IActionResult PostLogin([FromBody]Request req)
+        public IActionResult PostLogin([FromBody]LoginRequest req,[FromHeader] bool nocript)
         {
-            Usuario usuario = _contexto.Usuarios.SingleOrDefault(x => x.Email == req.Email && x.Contrasenya == req.Contrasenya);
+            string contrasenya = "";
 
-            Login resp = new Login();
+            if (nocript)
+            {
+                contrasenya = CalcularMD5(req.Contrasenya);
+            }
+            else
+            {
+                contrasenya = req.Contrasenya;
+            }
+
+           
+
+            Usuario usuario = _contexto.Usuarios.SingleOrDefault(x => x.Email == req.Email && x.Contrasenya == contrasenya);
 
             if (usuario == null)
             {
@@ -43,27 +50,7 @@ namespace ApiEscapeRank.Controladores
             }
             else
             {
-                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-
-                byte[] key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-
-                SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                    new Claim(ClaimTypes.Name, usuario.Id.ToString())
-                    }),
-                    Expires = DateTime.UtcNow.AddMinutes(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-
-                SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-
-                resp.TipoToken = "Bearer";
-                resp.TokenAcceso = tokenHandler.WriteToken(token);
-                resp.TokenRefresco = tokenHandler.WriteToken(token);
-                resp.ExpiraEn = token.ValidTo.ToString();
-                resp.IdUsuario = usuario.Id.ToString();
+                Login resp = new Login(usuario.Id, Configuration);
 
                 return Ok(resp);
             }
@@ -71,7 +58,7 @@ namespace ApiEscapeRank.Controladores
 
         [AllowAnonymous]
         [HttpPost("registro")]
-        public async Task<ActionResult<Login>> PostRegistro([FromBody]Request req)
+        public async Task<ActionResult<Login>> PostRegistro([FromBody]LoginRequest req)
         {
             Usuario usuarioRegistro = new Usuario
             {
@@ -85,44 +72,41 @@ namespace ApiEscapeRank.Controladores
             try
             {
                 await _contexto.SaveChangesAsync();
+
+                Login resp = new Login(usuarioRegistro.Id, Configuration);
+
+                return resp;
             }
             catch (DbUpdateException)
             {
-                //if (UsuarioExists(usuarioRegistro.Id))
-                //{
-                //    return Conflict();
-                //}
-                //else
-                //{
-                //    throw;
-                //}
-            }
-
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-
-            Login resp = new Login();
-
-            byte[] key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
+                if (RegistroExists(usuarioRegistro.Email))
                 {
-                    new Claim(ClaimTypes.Name, usuarioRegistro.Id.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
 
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+        private bool RegistroExists(string email)
+        {
+            return _contexto.Usuarios.Any(e => e.Email == email);
+        }
 
-            resp.TipoToken = "Bearer";
-            resp.TokenAcceso = tokenHandler.WriteToken(token);
-            resp.TokenRefresco = tokenHandler.WriteToken(token);
-            resp.ExpiraEn = token.ValidTo.ToString();
-            resp.IdUsuario = usuarioRegistro.Id.ToString();
+        public static string CalcularMD5(string contrasenya)
+        {
+            MD5 md5 = MD5.Create();
+            byte[] inputBytes = Encoding.ASCII.GetBytes(contrasenya);
+            byte[] hash = md5.ComputeHash(inputBytes);
 
-            return resp;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("x2"));
+            }
+            return sb.ToString();
         }
     }
 }
