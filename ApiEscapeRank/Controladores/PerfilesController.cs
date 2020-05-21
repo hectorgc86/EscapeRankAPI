@@ -37,7 +37,7 @@ namespace ApiEscapeRank.Controladores
 
             if (perfil == null)
             {
-                return NotFound("No se encuentra perfil para usuario con id " + id);
+                return NotFound();
             }
             else
             {
@@ -61,7 +61,7 @@ namespace ApiEscapeRank.Controladores
 
         // PUT: api/perfiles/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerfil(int id, Perfil perfil)
+        public async Task<ActionResult> PutPerfil(int id, Perfil perfil)
         {
             if (id != perfil.Id)
             {

@@ -24,16 +24,21 @@ namespace ApiEscapeRank.Controladores
         [HttpGet]
         public async Task<ActionResult<List<Usuario>>> GetUsuarios()
         {
-            return await _contexto.Usuarios.Include(p => p.Perfil).ToListAsync();
+            List<Usuario> usuarios = await _contexto.GetUsuarios().ToListAsync();
+
+            if (usuarios == null)
+            {
+                return NotFound();
+            }
+
+            return usuarios;
         }
 
         // GET: api/usuarios/equipo/5
         [HttpGet("equipo/{id}")]
         public async Task<ActionResult<List<Usuario>>> GetUsuariosEquipo(int id)
         {
-            string sqlString = "SELECT * FROM usuarios WHERE id IN (SELECT usuario_id FROM equipos_usuarios WHERE equipo_id = " + id +")";
-
-            List<Usuario> usuariosEquipo = await _contexto.Usuarios.FromSqlRaw(sqlString).ToListAsync();
+            List<Usuario> usuariosEquipo = await _contexto.GetUsuariosEquipo(id).ToListAsync();
 
             if (usuariosEquipo == null)
             {
@@ -47,13 +52,11 @@ namespace ApiEscapeRank.Controladores
         [HttpGet("{id}")]
         public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
-            Usuario usuario = await _contexto.Usuarios
-                .Include(p => p.Perfil)
-                .FirstOrDefaultAsync(i => i.Id == id);
+            Usuario usuario = await _contexto.GetUsuario(id).FirstOrDefaultAsync();
 
             if (usuario == null)
             {
-                return NotFound("No se encuentra usuario con id " + id);
+                return NotFound();
             }
             else
             {
@@ -61,21 +64,15 @@ namespace ApiEscapeRank.Controladores
             } 
         }
 
-
         // GET: api/usuarios/5/amigos
         [HttpGet("{id}/amigos")]
-        public async Task<ActionResult<List<Usuario>>> GetAmigosUsuario(int id)
+        public ActionResult<List<Amigo>> GetAmigosUsuario(int id)
         {
-            string consulta = "SELECT * FROM usuarios WHERE id" +
-                " IN(SELECT amigo_id FROM usuarios_amigos WHERE usuario_id = " + id + ")";
-
-            List<Usuario> amigos = await _contexto.Usuarios.FromSqlRaw(consulta)
-                .Include(p => p.Perfil)
-                .ToListAsync();
+            List<Amigo> amigos = _contexto.GetAmigosUsuario(id);
 
             if (amigos == null)
             {
-                return NotFound("No se encuentran amigos para usuario con id " + id);
+                return NotFound();
             }
             else
             {
@@ -83,10 +80,71 @@ namespace ApiEscapeRank.Controladores
             }
         }
 
+        // POST: api/usuarios
+        [HttpPost]
+        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        {
+            _contexto.Usuarios.Add(usuario);
 
-        // PUT: api/Usuarios/5
+            try
+            {
+                await _contexto.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
+            }
+
+            return CreatedAtAction("GetUsuarios", new { id = usuario.Id }, usuario);
+        }
+
+        // POST: api/usuarios/5/amigos
+        [HttpPost("{usuarioId}/amigos")]
+        public async Task<ActionResult> PostAmigo(int usuarioId,[FromBody]string emailAmigo)
+        {
+            Usuario amigo = await _contexto.GetUsuarios()
+                .Where(u => u.Email == emailAmigo).FirstOrDefaultAsync();
+
+            if(amigo == null || amigo.Id == usuarioId)
+            {
+                return NotFound();
+            }
+
+            UsuariosAmigos usuarioAmigo = await _contexto.UsuariosAmigos
+                .Where(u => u.UsuarioId == usuarioId && u.AmigoId == amigo.Id).FirstOrDefaultAsync();
+
+            if (usuarioAmigo == null)
+            {
+                usuarioAmigo = new UsuariosAmigos()
+                {
+                    UsuarioId = usuarioId,
+                    AmigoId = amigo.Id
+                };
+
+                _contexto.UsuariosAmigos.Add(usuarioAmigo);
+            }
+            else
+            {
+                usuarioAmigo.Estado = Estado.pendiente;
+
+                _contexto.Entry(usuarioAmigo).State = EntityState.Modified;
+            }
+            
+            try
+            {
+                await _contexto.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
+            }
+
+            return Ok();
+        }
+
+        // PUT: api/usuarios/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
+        public async Task<ActionResult> PutUsuario(int id, Usuario usuario)
         {
             if (id != usuario.Id)
             {
@@ -114,30 +172,88 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/usuarios
-        [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        // PUT: api/usuarios/5/amigos/5
+        [HttpPut("{usuarioId}/amigos/{amigoId}")]
+        public async Task<ActionResult> PutAmigo(int usuarioId, int amigoId)
         {
-            _contexto.Usuarios.Add(usuario);
-            await _contexto.SaveChangesAsync();
+            UsuariosAmigos usuarioAmigo =
+                await _contexto.UsuariosAmigos.Where(u => u.UsuarioId == usuarioId
+                && u.AmigoId == amigoId || u.AmigoId == usuarioId
+                && u.UsuarioId == amigoId).FirstOrDefaultAsync();
 
-            return CreatedAtAction("GetUsuarios", new { id = usuario.Id }, usuario);
+            if (usuarioAmigo == null)
+            {
+                return NotFound();
+            }
+
+            usuarioAmigo.Estado = Estado.aceptado;
+
+            _contexto.Entry(usuarioAmigo).State = EntityState.Modified;
+
+            try
+            {
+                await _contexto.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
+            }
+
+            return Ok();
         }
 
         // DELETE: api/usuarios/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Usuario>> DeleteUsuario(int id)
+        public async Task<ActionResult> DeleteUsuario(int id)
         {
-            var usuario = await _contexto.Usuarios.FindAsync(id);
+            Usuario usuario = await _contexto.Usuarios.FindAsync(id);
             if (usuario == null)
             {
                 return NotFound();
             }
 
             _contexto.Usuarios.Remove(usuario);
-            await _contexto.SaveChangesAsync();
 
-            return usuario;
+            try
+            {
+                await _contexto.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
+            }
+
+            return Ok();
+        }
+
+        // DELETE: api/usuarios/5/amigos/5
+        [HttpDelete("{usuarioId}/amigos/{amigoId}")]
+        public async Task<ActionResult> DeleteAmigo(int usuarioId, int amigoId)
+        {
+            UsuariosAmigos usuarioAmigo =
+                await _contexto.UsuariosAmigos.Where(u=>u.UsuarioId == usuarioId
+                && u.AmigoId == amigoId || u.AmigoId == usuarioId
+                && u.UsuarioId == amigoId).FirstOrDefaultAsync();
+
+            if (usuarioAmigo == null)
+            {
+                return NotFound();
+            }
+
+            usuarioAmigo.Estado = Estado.borrado;
+
+            _contexto.Entry(usuarioAmigo).State = EntityState.Modified;
+
+            try
+            {
+                await _contexto.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
+            }
+
+            return Ok();
         }
 
         private bool UsuarioExists(int id)

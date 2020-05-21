@@ -24,12 +24,12 @@ namespace ApiEscapeRank.Controladores
         [HttpGet]
         public async Task<ActionResult<List<Publico>>> GetPublico()
         {
-            string sqlString = "SELECT id ,tipo, COUNT(*) numero_salas " +
-                "FROM publico, salas_publico " +
-                "WHERE publico.id = salas_publico.publico_id " +
-                "GROUP BY id, tipo";
+            List<Publico> publicos = await _contexto.GetPublico().ToListAsync();
 
-            List<Publico> publicos = await _contexto.Publico.FromSqlRaw(sqlString).ToListAsync();
+            if (publicos == null)
+            {
+                return NotFound();
+            }
 
             return publicos;
         }

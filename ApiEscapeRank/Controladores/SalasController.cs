@@ -28,22 +28,11 @@ namespace ApiEscapeRank.Controladores
 
             if (string.IsNullOrEmpty(busqueda))
             {
-                salas = await _contexto.Salas
-                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Skip(offset)
-                .Take(10)
-                .ToListAsync();
+                salas = await _contexto.GetSalas(offset).ToListAsync();
             }
             else
             {
-                salas = await _contexto.Salas
-                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Where(s=>s.Nombre.ToLower().Contains(busqueda.ToLower()) ||
-                s.Companyia.Ciudad.Nombre.ToLower().Contains(busqueda.ToLower()) ||
-                s.Companyia.Nombre.ToLower().Contains(busqueda.ToLower()))
-                .Skip(offset)
-                .Take(10)
-                .ToListAsync();
+                salas = await _contexto.GetSalasFiltradas(offset, busqueda).ToListAsync();
             }
 
             if (salas == null)
@@ -58,7 +47,7 @@ namespace ApiEscapeRank.Controladores
         [HttpGet("promocionadas")]
         public async Task<ActionResult<List<Sala>>> GetSalasPromocionadas([FromQuery]int offset)
         {
-            List<Sala> salasPromocionadas = await _contexto.Salas.Where(p=>p.Promocionada == 1)
+            List<Sala> salasPromocionadas = await _contexto.Salas.Where(p=>p.Promocionada == true)
                 .Include(c => c.Companyia).ThenInclude(ci=>ci.Ciudad)
                 .Skip(offset)
                 .Take(10)
@@ -80,24 +69,11 @@ namespace ApiEscapeRank.Controladores
 
             if (string.IsNullOrEmpty(busqueda))
             {
-                salasCategoria = await _contexto.Salas
-                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Where(s => s.SalasCategorias.Any(c => c.CategoriaId == id))
-                .Skip(offset)
-                .Take(10)
-                .ToListAsync();
+                salasCategoria = await _contexto.GetSalasCategoria(id, offset).ToListAsync();
             }
             else
             {
-                salasCategoria = await _contexto.Salas
-               .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-               .Where(s => s.SalasCategorias.Any(c=> c.CategoriaId == id) &&
-               s.Nombre.ToLower().Contains(busqueda.ToLower()) ||
-               s.Companyia.Ciudad.Nombre.ToLower().Contains(busqueda.ToLower()) ||
-               s.Companyia.Nombre.ToLower().Contains(busqueda.ToLower()))
-               .Skip(offset)
-               .Take(10)
-               .ToListAsync();
+                salasCategoria = await _contexto.GetSalasCategoriaFiltradas(id, offset, busqueda).ToListAsync();
             }
 
             if (salasCategoria == null)
@@ -116,25 +92,11 @@ namespace ApiEscapeRank.Controladores
 
             if (string.IsNullOrEmpty(busqueda))
             {
-                salasTematica = await _contexto.Salas
-                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Where(p => p.SalasTematicas.Any(t => t.TematicaId == id))
-                .Skip(offset)
-                .Take(10)
-                .ToListAsync();
+                salasTematica = await _contexto.GetSalasTematica(id, offset).ToListAsync();
             }
             else
             {
-                salasTematica = await _contexto.Salas
-                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Where(s => s.SalasTematicas.Any(t => t.TematicaId == id) &&
-                s.Nombre.ToLower().Contains(busqueda.ToLower()) ||
-                s.Companyia.Ciudad.Nombre.ToLower().Contains(busqueda.ToLower()) ||
-                s.Companyia.Nombre.ToLower().Contains(busqueda.ToLower()))
-                .Skip(offset)
-                .Take(10)
-                .ToListAsync();
-                  
+                salasTematica = await _contexto.GetSalasTematicaFiltradas(id, offset, busqueda).ToListAsync();
             }
                 if (salasTematica == null)
             {
@@ -152,24 +114,11 @@ namespace ApiEscapeRank.Controladores
 
             if (string.IsNullOrEmpty(busqueda))
             {
-                salasPublico = await _contexto.Salas
-                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Where(p => p.SalasPublico.Any(c => c.PublicoId == id))
-                .Skip(offset)
-                .Take(10)
-                .ToListAsync();
+                salasPublico = await _contexto.GetSalasPublico(id, offset).ToListAsync();
             }
             else
             {
-                salasPublico = await _contexto.Salas
-               .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-               .Where(s => s.SalasPublico.Any(c => c.PublicoId == id) &&
-               s.Nombre.ToLower().Contains(busqueda.ToLower()) ||
-               s.Companyia.Ciudad.Nombre.ToLower().Contains(busqueda.ToLower()) ||
-               s.Companyia.Nombre.ToLower().Contains(busqueda.ToLower()))
-               .Skip(offset)
-               .Take(10)
-               .ToListAsync();
+                salasPublico = await _contexto.GetSalasPublicoFiltradas(id, offset, busqueda).ToListAsync();
             }
 
             if (salasPublico == null)
@@ -188,24 +137,11 @@ namespace ApiEscapeRank.Controladores
 
             if (string.IsNullOrEmpty(busqueda))
             {
-                salasDificultad = await _contexto.Salas
-                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Where(d => d.DificultadId == id)
-                .Skip(offset)
-                .Take(10)
-                .ToListAsync();
+                salasDificultad = await _contexto.GetSalasDificultad(id, offset).ToListAsync();
             }
             else
             {
-                salasDificultad = await _contexto.Salas
-                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Where(s => s.DificultadId == id &&
-                s.Nombre.ToLower().Contains(busqueda.ToLower()) ||
-                s.Companyia.Ciudad.Nombre.ToLower().Contains(busqueda.ToLower()) ||
-                s.Companyia.Nombre.ToLower().Contains(busqueda.ToLower()))
-                .Skip(offset)
-                .Take(10)
-                .ToListAsync();
+                salasDificultad = await _contexto.GetSalasDificultadFiltradas(id, offset, busqueda).ToListAsync();
             }
 
             if (salasDificultad == null)
@@ -216,36 +152,12 @@ namespace ApiEscapeRank.Controladores
             return salasDificultad;
         }
 
-        // GET: api/salas/provincia/5
-        [HttpGet("provincia/{id}")]
-        public async Task<ActionResult<List<Sala>>> GetSalasProvincia(string id,[FromQuery]int offset)
-        {
-            List<Sala> salasProvincia = await _contexto.Salas
-                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Where(pi => pi.Companyia.Ciudad.ProvinciaId == id)
-                .Skip(offset)
-                .Take(10)
-                .ToListAsync();
-
-            if (salasProvincia == null)
-            {
-                return NotFound();
-            }
-
-            return salasProvincia;
-        }
 
         // GET: api/salas/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Sala>> GetSala(string id)
         {
-            var sala = await _contexto.Salas
-                .Include(e=>e.Dificultad)
-                .Include(c => c.Companyia).ThenInclude(ci => ci.Ciudad)
-                .Include(sc => sc.SalasCategorias).ThenInclude(s=>s.Categoria)
-                .Include(st => st.SalasTematicas).ThenInclude(t=>t.Tematica)
-                .Include(sp => sp.SalasPublico).ThenInclude(p=>p.Publico)
-                .FirstOrDefaultAsync(i=>i.Id == id);
+            Sala sala = await _contexto.GetSala(id).FirstOrDefaultAsync();
 
             if (sala == null)
             {

@@ -22,29 +22,31 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/noticias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Noticia>>> GetNoticias()
+        public async Task<ActionResult<List<Noticia>>> GetNoticias()
         {
-            return await _contexto.Noticias.ToListAsync();
+            List<Noticia> noticias = await _contexto.GetNoticias().ToListAsync();
+
+            if(noticias == null)
+            {
+                return NotFound();
+            }
+
+            return noticias;
         }
 
         // GET: api/noticias/usuario/5
         [HttpGet("usuario/{id}")]
         public async Task<ActionResult<List<Noticia>>> GetNoticiasUsuario(int id)
         {
-            string consulta = "SELECT * FROM noticias WHERE usuario_id" +
-                " IN(SELECT amigo_id FROM usuarios_amigos WHERE usuario_id = " + id + ")" +
-                " OR noticias.promocionada = 1" +
-                " OR noticias.usuario_id = " + id + " ORDER by noticias.fecha DESC";
+            List<Noticia> noticiasUsuario = await _contexto.GetNoticiasUsuario(id).ToListAsync();
 
-            List<Noticia> noticias = await _contexto.Noticias.FromSqlRaw(consulta).ToListAsync();
-
-            if (noticias == null)
+            if (noticiasUsuario == null)
             {
-                return NotFound("No se encuentran noticias para usuario con id " + id);
+                return NotFound();
             }
             else
             {
-                return noticias;
+                return noticiasUsuario;
             }
         }
 
@@ -52,7 +54,7 @@ namespace ApiEscapeRank.Controladores
         [HttpGet("{id}")]
         public async Task<ActionResult<Noticia>> GetNoticia(int id)
         {
-            var noticia = await _contexto.Noticias.FindAsync(id);
+            Noticia noticia = await _contexto.GetNoticia(id).FirstOrDefaultAsync();
 
             if (noticia == null)
             {
@@ -63,10 +65,8 @@ namespace ApiEscapeRank.Controladores
         }
 
         // PUT: api/noticias/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutNoticia(int id, Noticia noticia)
+        public async Task<ActionResult> PutNoticia(int id, Noticia noticia)
         {
             if (id != noticia.Id)
             {
@@ -95,8 +95,6 @@ namespace ApiEscapeRank.Controladores
         }
 
         // POST: api/noticias
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Noticia>> PostNoticia(Noticia noticia)
         {

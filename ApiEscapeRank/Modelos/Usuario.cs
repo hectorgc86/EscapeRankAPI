@@ -10,26 +10,33 @@ namespace ApiEscapeRank.Modelos
         public string Contrasenya { get; set; }
 
         public int Id { get; set; }
-        public string Nombre { get; set; }
+        public string Nick { get; set; }
         public string Email { get; set; }
-        public DateTime? Nacido { get; set; }
-        public string Telefono { get; set; }
-        public int Activado { get; set; }
-        public int? CodigoActivado { get; set; }
-        public string Avatar { get; set; }
+        public bool Activado { get; set; }
         public virtual Perfil Perfil { get; set; }
 
         public virtual ICollection<EquiposUsuarios> EquiposUsuarios { get; set; }
         public virtual ICollection<Noticia> Noticias { get; set; }
-        public virtual ICollection<UsuariosAmigos> UsuariosAmigosAmigo { get; set; }
-        public virtual ICollection<UsuariosAmigos> UsuariosAmigosUsuario { get; set; }
+        public virtual ICollection<UsuariosAmigos> UsuariosAmigos{ get; set; }
 
         public Usuario()
         {
             EquiposUsuarios = new HashSet<EquiposUsuarios>();
             Noticias = new HashSet<Noticia>();
-            UsuariosAmigosAmigo = new HashSet<UsuariosAmigos>();
-            UsuariosAmigosUsuario = new HashSet<UsuariosAmigos>();
+            UsuariosAmigos = new HashSet<UsuariosAmigos>();
         }
+    }
+
+    public class UsuarioRequest
+    {
+        public string Nick { get; set; }
+        public string Contrasenya { get; set; }
+        public string Email { get; set; }
+        public PerfilRequest Perfil { get; set; }
+    }
+
+    public class Amigo : Usuario
+    {
+        public Estado Estado { get; set; }
     }
 }

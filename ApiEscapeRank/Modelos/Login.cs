@@ -47,8 +47,7 @@ namespace ApiEscapeRank.Modelos
 
     public class LoginRequest
     {
-        public string Nombre { get; set; }
-        public string Email { get; set; }
+        public string Usuario { get; set; }
         public string Contrasenya { get; set; }
         public string Token { get; set; }
     }

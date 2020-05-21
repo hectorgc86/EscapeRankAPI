@@ -7,7 +7,7 @@ namespace ApiEscapeRank.Modelos
     {
         public string Id { get; set; }
         public string Nombre { get; set; }
-        public int Promocionada { get; set; }
+        public bool Promocionada { get; set; }
         public string Duracion { get; set; }
         public int? MinimoJugadores { get; set; }
         public int? MaximoJugadores { get; set; }

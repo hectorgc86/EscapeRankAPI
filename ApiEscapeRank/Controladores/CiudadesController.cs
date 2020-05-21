@@ -22,16 +22,23 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/ciudades
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ciudad>>> GetCiudades()
+        public async Task<ActionResult<List<Ciudad>>> GetCiudades()
         {
-            return await _contexto.Ciudades.ToListAsync();
+            List<Ciudad> ciudades = await _contexto.GetCiudades().ToListAsync();
+
+            if (ciudades == null)
+            {
+                return NotFound();
+            }
+
+            return ciudades;
         }
 
         // GET: api/ciudades/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Ciudad>> GetCiudad(string id)
         {
-            var ciudad = await _contexto.Ciudades.FindAsync(id);
+            Ciudad ciudad = await _contexto.GetCiudad(id).FirstOrDefaultAsync();
 
             if (ciudad == null)
             {
@@ -43,7 +50,7 @@ namespace ApiEscapeRank.Controladores
 
         // PUT: api/ciudades/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCiudad(string id, Ciudad ciudad)
+        public async Task<ActionResult> PutCiudad(string id, Ciudad ciudad)
         {
             if (id != ciudad.Id)
             {
@@ -99,7 +106,8 @@ namespace ApiEscapeRank.Controladores
         [HttpDelete("{id}")]
         public async Task<ActionResult<Ciudad>> DeleteCiudad(string id)
         {
-            var ciudad = await _contexto.Ciudades.FindAsync(id);
+            Ciudad ciudad = await _contexto.Ciudades.FindAsync(id);
+
             if (ciudad == null)
             {
                 return NotFound();

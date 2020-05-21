@@ -4,8 +4,16 @@
     {
         public int UsuarioId { get; set; }
         public int AmigoId { get; set; }
+        public Estado Estado { get; set; }
 
         public virtual Usuario Amigo { get; set; }
         public virtual Usuario Usuario { get; set; }
+    }
+
+    public enum Estado
+    {
+        pendiente,
+        aceptado,
+        borrado
     }
 }

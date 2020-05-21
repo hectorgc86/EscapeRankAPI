@@ -24,16 +24,9 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/companyias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Companyia>>> GetCompanyias()
+        public async Task<ActionResult<List<Companyia>>> GetCompanyias()
         {
-            return await _contexto.Companyias.ToListAsync();
-        }
-
-        // GET: api/companyias/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Companyia>> GetCompanyia(string id)
-        {
-            var companyias = await _contexto.Companyias.FindAsync(id);
+            List<Companyia> companyias = await _contexto.GetCompanyias().ToListAsync();
 
             if (companyias == null)
             {
@@ -43,9 +36,23 @@ namespace ApiEscapeRank.Controladores
             return companyias;
         }
 
+        // GET: api/companyias/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Companyia>> GetCompanyia(string id)
+        {
+            Companyia companyia = await _contexto.GetCompanyia(id).FirstOrDefaultAsync();
+
+            if (companyia == null)
+            {
+                return NotFound();
+            }
+
+            return companyia;
+        }
+
         // PUT: api/companyias/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompanyia(string id, Companyia companyias)
+        public async Task<ActionResult> PutCompanyia(string id, Companyia companyias)
         {
             if (id != companyias.Id)
             {

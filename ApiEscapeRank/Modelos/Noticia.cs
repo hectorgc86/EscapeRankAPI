@@ -16,8 +16,11 @@ namespace ApiEscapeRank.Modelos
         public int? NumeroComentarios { get; set; }
         public string CompanyiaId { get; set; }
         public int? UsuarioId { get; set; }
+        public int? EquipoId { get; set; }
+
 
         public virtual Companyia Companyia { get; set; }
         public virtual Usuario Usuario { get; set; }
+        public virtual Equipo Equipo { get; set; }
     }
 }

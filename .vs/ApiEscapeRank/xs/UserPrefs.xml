@@ -1,11 +1,13 @@
 ﻿<Properties StartupConfiguration="{8E920263-834C-481F-A5E1-752F212BFA61}|Default">
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="ApiEscapeRank/Program.cs">
+    <Files>
+      <File FileName="ApiEscapeRank/Program.cs" Line="10" Column="1" />
+      <File FileName="ApiEscapeRank/Modelos/Contexto/MySQLDbContext.cs" Line="217" Column="95" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="ApiEscapeRank" expanded="True">
-            <Node name="ApiEscapeRank" expanded="True" />
-          </Node>
+          <Node />
         </State>
       </Pad>
     </Pads>
@@ -14,7 +16,9 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.ApiEscapeRank PreferredExecutionTarget="/Applications/Safari.app" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/hectorgc86/DAM2/Proyecto final ciclo/ApiEscapeRank/ApiEscapeRank/Controladores/EquiposController.cs" relfile="ApiEscapeRank/Controladores/EquiposController.cs" line="78" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>

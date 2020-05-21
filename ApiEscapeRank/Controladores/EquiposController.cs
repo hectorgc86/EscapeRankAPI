@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,25 +25,30 @@ namespace ApiEscapeRank.Controladores
         [HttpGet]
         public async Task<ActionResult<List<Equipo>>> GetEquipos()
         {
-            return await _contexto.Equipos.ToListAsync();
+            List<Equipo> equipos = await _contexto.GetEquipos().ToListAsync();
+
+            if (equipos == null)
+            {
+                return NotFound();
+            }
+
+            return equipos;
         }
 
         // GET: api/equipos/usuario/5
         [HttpGet("usuario/{id}")]
         public async Task<ActionResult<List<Equipo>>> GetEquiposUsuario(int id)
         {
-            string consulta = "SELECT * FROM equipos WHERE id" +
-                " IN(SELECT equipo_id FROM equipos_usuarios WHERE usuario_id = " + id + ")";
 
-            List<Equipo> equipos = await _contexto.Equipos.FromSqlRaw(consulta).ToListAsync();
+            List<Equipo> equipoUsuario = await _contexto.GetEquiposUsuario(id).ToListAsync();
 
-            if (equipos == null)
+            if (equipoUsuario == null)
             {
-                return NotFound("No se encuentran equipos para usuario con id " + id);
+                return NotFound();
             }
             else
             {
-                return equipos;
+                return equipoUsuario;
             }
         }
 
@@ -50,7 +56,7 @@ namespace ApiEscapeRank.Controladores
         [HttpGet("{id}")]
         public async Task<ActionResult<Equipo>> GetEquipo(int id)
         {
-            Equipo equipo = await _contexto.Equipos.FirstOrDefaultAsync(i => i.Id == id);
+            Equipo equipo = await _contexto.GetEquipo(id).FirstOrDefaultAsync();
 
             if (equipo == null)
             {
@@ -62,7 +68,7 @@ namespace ApiEscapeRank.Controladores
 
         // PUT: api/equipos/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEquipo(int id, Equipo equipo)
+        public async Task<ActionResult> PutEquipo(int id, Equipo equipo)
         {
             if (id != equipo.Id)
             {
@@ -92,28 +98,66 @@ namespace ApiEscapeRank.Controladores
 
         // POST: api/equipos
         [HttpPost]
-        public async Task<ActionResult<Equipo>> PostEquipo(Equipo equipo)
+        public async Task<ActionResult> PostEquipo(EquipoRequest req)
         {
-            _contexto.Equipos.Add(equipo);
-            await _contexto.SaveChangesAsync();
+            Equipo equipo = new Equipo
+            {
+                Nombre = req.Nombre,
+                Avatar = "https://picsum.photos/200/300?random=",
+                Activado = true
+            };
 
-            return CreatedAtAction("GetEquipos", new { id = equipo.Id }, equipo);
+            _contexto.Equipos.Add(equipo);
+
+            foreach (Usuario u in req.Usuarios){
+
+                EquiposUsuarios eu = new EquiposUsuarios
+                {
+                    UsuarioId = u.Id,
+                    EquipoId = equipo.Id
+                };
+
+                equipo.EquiposUsuarios.Add(eu);
+            }
+
+            _contexto.Equipos.Add(equipo);
+
+            try
+            {
+                await _contexto.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch
+            {
+                throw;
+            }
+
         }
 
         // DELETE: api/equipos/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Equipo>> DeleteEquipo(int id)
+        public async Task<ActionResult> DeleteEquipo(int id)
         {
-            var equipo = await _contexto.Equipos.FindAsync(id);
+            Equipo equipo = await _contexto.GetEquipo(id).FirstOrDefaultAsync();
+
             if (equipo == null)
             {
                 return NotFound();
             }
 
-            _contexto.Equipos.Remove(equipo);
-            await _contexto.SaveChangesAsync();
+            equipo.Activado = false;
 
-            return equipo;
+            try
+            {
+                await _contexto.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
+            }
+           
+            return Ok();
         }
 
         private bool EquipoExists(int id)

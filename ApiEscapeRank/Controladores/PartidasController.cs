@@ -1,10 +1,14 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiEscapeRank.Modelos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace ApiEscapeRank.Controladores
 {
@@ -14,30 +18,35 @@ namespace ApiEscapeRank.Controladores
     public class PartidasController : ControllerBase
     {
         private readonly MySQLDbcontext _contexto;
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
 
-        public PartidasController(MySQLDbcontext contexto)
+        public PartidasController(MySQLDbcontext contexto, IWebHostEnvironment env, IConfiguration configuration)
         {
+            _env = env;
             _contexto = contexto;
+            _configuration = configuration;
         }
 
         // GET: api/partidas
         [HttpGet]
         public async Task<ActionResult<List<Partida>>> GetPartidas()
         {
-            return await _contexto.Partidas.ToListAsync();
+            List<Partida> partidas = await _contexto.GetPartidas().ToListAsync();
+
+            if (partidas == null)
+            {
+                return NotFound();
+            }
+
+            return partidas;
         }
 
         // GET: api/partidas/usuario/5
         [HttpGet("usuario/{id}")]
         public async Task<ActionResult<List<Partida>>> GetPartidasUsuario(int id)
         {
-            string sqlString = "SELECT * from partidas WHERE equipo_id IN (SELECT equipo_id FROM equipos_usuarios WHERE usuario_id = "+ id +")";
-
-            List<Partida> partidasUsuario = await _contexto.Partidas.FromSqlRaw(sqlString)
-                .Include(s=>s.Sala)
-                .Include(e=>e.Equipo)
-                .OrderByDescending(f=>f.Fecha)
-                .ToListAsync();
+            List<Partida> partidasUsuario = await _contexto.GetPartidasUsuario(id).ToListAsync();
 
             if (partidasUsuario == null)
             {
@@ -51,10 +60,7 @@ namespace ApiEscapeRank.Controladores
         [HttpGet("equipo/{id}")]
         public async Task<ActionResult<List<Partida>>> GetPartidasEquipo(int id)
         {
-            List<Partida> partidasEquipo = await _contexto.Partidas
-                .Where(ei => ei.EquipoId == id)
-                .Include(s => s.Sala)
-                .ToListAsync();
+            List<Partida> partidasEquipo = await _contexto.GetPartidasEquipo(id).ToListAsync();
 
             if (partidasEquipo == null)
             {
@@ -68,13 +74,7 @@ namespace ApiEscapeRank.Controladores
         [HttpGet("sala/{id}")]
         public async Task<ActionResult<List<Partida>>> GetPartidasSala(string id)
         {
-            string sqlString = "SELECT * FROM partidas WHERE sala_id = '" + id + "'";
-
-            List<Partida> partidasSala = await _contexto.Partidas
-                .Where(si=>si.SalaId == id)
-                .Include(s => s.Sala)
-                .Include(e=>e.Equipo)
-                .ToListAsync();
+            List<Partida> partidasSala = await _contexto.GetPartidasSala(id).ToListAsync();
 
             if (partidasSala == null)
             {
@@ -88,7 +88,7 @@ namespace ApiEscapeRank.Controladores
         [HttpGet("{id}")]
         public async Task<ActionResult<Partida>> GetPartida(int id)
         {
-            var partida = await _contexto.Partidas.FindAsync(id);
+            Partida partida = await _contexto.GetPartida(id).FirstOrDefaultAsync();
 
             if (partida == null)
             {
@@ -100,7 +100,7 @@ namespace ApiEscapeRank.Controladores
 
         // PUT: api/partidas/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPartida(int id, Partida partida)
+        public async Task<ActionResult> PutPartida(int id, Partida partida)
         {
             if (id != partida.Id)
             {
@@ -130,7 +130,7 @@ namespace ApiEscapeRank.Controladores
 
         // POST: api/partidas
         [HttpPost]
-        public async Task<ActionResult<bool>> PostPartida(PartidaRequest req)
+        public async Task<ActionResult> PostPartida(PartidaRequest req)
         {
             Partida partidaNueva = new Partida
             {
@@ -138,46 +138,56 @@ namespace ApiEscapeRank.Controladores
                 Segundos = req.Segundos,
                 SalaId = req.Sala.Id,
                 EquipoId = req.Equipo.Id,
-                Fecha = req.Fecha
-            };
+                Fecha = req.Fecha.Value,
+                Imagen = await GestionarFoto(req.Foto)
+        };
+
+
+        List<Usuario> miembros = await _contexto.GetUsuariosEquipo(req.Equipo.Id)
+                .Include(p=>p.Perfil).ToListAsync();
+
+            foreach (Usuario miembro in miembros)
+            {
+                if(miembro.Perfil != null)
+                {
+                    miembro.Perfil.NumeroPartidas += 1;
+
+                    if (int.Parse(req.Minutos) == int.Parse(req.Sala.Duracion) && int.Parse(req.Segundos) == 0
+                        || int.Parse(req.Minutos) < int.Parse(req.Sala.Duracion))
+                    {
+                        miembro.Perfil.PartidasGanadas += 1;
+                    }
+                    else
+                    {
+                        miembro.Perfil.PartidasPerdidas += 1;
+                    }
+                }
+            }
+
+            _contexto.Entry(req.Equipo).State = EntityState.Modified;
 
             _contexto.Partidas.Add(partidaNueva);
+
+            _contexto.Noticias.Add(await CrearNoticiaPartida(req, miembros));
 
             try
             {
                 await _contexto.SaveChangesAsync();
 
-                Noticia n = new Noticia
-                {
-                    Titular = "Partida jugada en " + req.Sala.Nombre,
-                    TextoCorto = "Has jugado una partida con tu equipo: " + req.Equipo.Nombre,
-                    TextoLargo = "Sala realizada en un tiempo de " + partidaNueva.Minutos + " minutos con " + partidaNueva.Segundos + "segundos el día " + partidaNueva.Fecha +". El equipo de EscapeRank y de la sala " + req.Sala.Nombre + " te estamos muy agradecidos."
-                };
-
-                string sqlString = "SELECT * FROM usuarios WHERE id IN (SELECT usuario_id FROM equipos_usuarios WHERE equipo_id = " + partidaNueva.EquipoId + ")";
-
-                List<Usuario> usuariosEquipo = await _contexto.Usuarios.FromSqlRaw(sqlString).ToListAsync();
-
-                foreach(Usuario u in usuariosEquipo)
-                {
-                    u.Noticias.Add(n);
-                }
-
-                await _contexto.SaveChangesAsync();
-
-                return true;
+                return Ok();
             }
-            catch (DbUpdateException)
+            catch (Exception)
             {
-                return false;
+                throw;
             }
         }
 
         // DELETE: api/Partidas/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Partida>> DeletePartida(int id)
+        public async Task<ActionResult> DeletePartida(int id)
         {
-            var partida = await _contexto.Partidas.FindAsync(id);
+            Partida partida = await _contexto.Partidas.FindAsync(id);
+
             if (partida == null)
             {
                 return NotFound();
@@ -186,12 +196,66 @@ namespace ApiEscapeRank.Controladores
             _contexto.Partidas.Remove(partida);
             await _contexto.SaveChangesAsync();
 
-            return partida;
+            return Ok();
         }
 
         private bool PartidaExists(int id)
         {
             return _contexto.Partidas.Any(e => e.Id == id);
+        }
+
+
+        private async Task<string> GestionarFoto(byte[] foto)
+        {
+            string imagen = null;
+
+            if (foto != null && foto.Length > 0)
+            {
+                imagen = DateTime.Now.Ticks.ToString() + ".jpg";
+
+                string rutaFotos = _configuration.GetSection("AppSettings").GetSection("RutaImagenesPartidas").Value;
+
+                await System.IO.File.WriteAllBytesAsync(_env.ContentRootPath + rutaFotos + imagen, foto);
+            }
+
+            return imagen;
+        }
+
+        private async Task<Noticia> CrearNoticiaPartida(PartidaRequest req, List<Usuario> miembros)
+        {
+            string imagen = await GestionarFoto(req.Foto);
+
+            string cadenaMiembros = "";
+
+            for (int i = 0;i < miembros.Count;i++)
+            {
+                cadenaMiembros += miembros[i].Perfil.Nombre;
+
+                if (i == miembros.Count - 2)
+                {
+                    cadenaMiembros += " y ";
+                }
+                else if(i == miembros.Count - 1)
+                {
+                    cadenaMiembros += " ";
+                }
+                else
+                {
+                    cadenaMiembros += ", ";
+                }
+            }
+
+            Noticia noticia = new Noticia
+            {
+                Imagen = imagen,
+                Titular = "Se ha jugado en " + req.Sala.Nombre,
+                TextoCorto = "El equipo: " + req.Equipo.Nombre + " ha jugado una nueva partida en " + req.Sala.Companyia.Ciudad.Nombre + ".",
+                TextoLargo = "¡" + cadenaMiembros + "han realizado un tiempo de " + req.Minutos + " minutos con " + req.Segundos + " segundos! " +
+                "Los equipos de EscapeRank y " + req.Sala.Companyia.Nombre + " os estamos muy agradecidos.",
+                EquipoId = req.Equipo.Id
+            };
+
+            return noticia;
         }
     }
 }

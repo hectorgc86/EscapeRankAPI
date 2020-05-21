@@ -22,14 +22,14 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/dificultades
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Dificultad>>> GetDificultades()
+        public async Task<ActionResult<List<Dificultad>>> GetDificultades()
         {
-            string sqlString = "SELECT dificultades.id, tipo, COUNT(*) numero_salas " +
-                "FROM dificultades, salas " +
-                "WHERE dificultades.id = salas.dificultad_id " +
-                "GROUP BY dificultades.id, tipo";
+            List<Dificultad> dificultades = await _contexto.GetDificultades().ToListAsync();
 
-            List<Dificultad> dificultades = await _contexto.Dificultades.FromSqlRaw(sqlString).ToListAsync();
+            if (dificultades == null)
+            {
+                return NotFound();
+            }
 
             return dificultades;
         }
@@ -38,7 +38,7 @@ namespace ApiEscapeRank.Controladores
         [HttpGet("{id}")]
         public async Task<ActionResult<Dificultad>> GetDificultad(string id)
         {
-            var dificultad = await _contexto.Dificultades.FindAsync(id);
+            Dificultad dificultad = await _contexto.GetDificultad(id).FirstOrDefaultAsync();
 
             if (dificultad == null)
             {
@@ -50,7 +50,7 @@ namespace ApiEscapeRank.Controladores
 
         // PUT: api/dificultades/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDificultad(string id, Dificultad dificultad)
+        public async Task<ActionResult> PutDificultad(string id, Dificultad dificultad)
         {
             if (id != dificultad.Id)
             {

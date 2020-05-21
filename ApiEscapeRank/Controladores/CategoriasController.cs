@@ -22,15 +22,14 @@ namespace ApiEscapeRank.Controladores
 
         // GET: api/categorias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categoria>>> GetCategorias([FromQuery]string ciudad=null)
+        public async Task<ActionResult<List<Categoria>>> GetCategorias()
         {
-            string sqlString = "SELECT id ,tipo, COUNT(*) numero_salas " +
-                "FROM categorias, salas_categorias " +
-                "WHERE categorias.id = salas_categorias.categoria_id " +
-                "GROUP BY id, tipo " +
-                "ORDER BY numero_salas DESC";
+            List<Categoria> categorias = await _contexto.GetCategorias().ToListAsync();
 
-            List<Categoria> categorias = await _contexto.Categorias.FromSqlRaw(sqlString).ToListAsync();
+            if (categorias == null)
+            {
+                return NotFound();
+            }
 
             return categorias;
         }
@@ -39,7 +38,7 @@ namespace ApiEscapeRank.Controladores
         [HttpGet("{id}")]
         public async Task<ActionResult<Categoria>> GetCategoria(string id)
         {
-            var categoria = await _contexto.Categorias.FindAsync(id);
+            Categoria categoria = await _contexto.GetCategoria(id).FirstOrDefaultAsync();
 
             if (categoria == null)
             {
@@ -51,7 +50,7 @@ namespace ApiEscapeRank.Controladores
 
         // PUT: api/categorias/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategoria(string id, Categoria categoria)
+        public async Task<ActionResult> PutCategoria(string id, Categoria categoria)
         {
             if (id != categoria.Id)
             {
@@ -84,6 +83,7 @@ namespace ApiEscapeRank.Controladores
         public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
         {
             _contexto.Categorias.Add(categoria);
+
             try
             {
                 await _contexto.SaveChangesAsync();
@@ -107,7 +107,8 @@ namespace ApiEscapeRank.Controladores
         [HttpDelete("{id}")]
         public async Task<ActionResult<Categoria>> DeleteCategoria(string id)
         {
-            var categoria = await _contexto.Categorias.FindAsync(id);
+            Categoria categoria = await _contexto.Categorias.FindAsync(id);
+
             if (categoria == null)
             {
                 return NotFound();
