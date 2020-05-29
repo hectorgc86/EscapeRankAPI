@@ -29,7 +29,11 @@ namespace ApiEscapeRank
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
-            string conexion = Configuration.GetSection("AppSettings").GetSection("Conexion").Value;
+#if DEBUG
+            string conexion = Configuration.GetSection("AppSettings").GetSection("ConexionLocal").Value;
+#else
+            string conexion = Configuration.GetSection("AppSettings").GetSection("ConexionRemota").Value;
+#endif
             string secret = Configuration.GetSection("AppSettings").GetSection("Secret").Value;
 
             services.AddDbContext<MySQLDbcontext>(opt => opt.UseMySql(conexion));

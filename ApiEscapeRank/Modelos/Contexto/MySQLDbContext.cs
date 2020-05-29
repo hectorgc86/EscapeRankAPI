@@ -53,7 +53,7 @@ namespace ApiEscapeRank.Modelos
                 Perfil = new Perfil
                 {
                     Id = (int)x[6],
-                    Nombre = (string)x[7],
+                    Nombre = x[7] != DBNull.Value ? (string)x[7]: "",
                     Avatar = (string)x[10]
                 }
             });

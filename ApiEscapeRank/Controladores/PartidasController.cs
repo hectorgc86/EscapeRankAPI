@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using ApiEscapeRank.Helpers;
+using Microsoft.Extensions.Options;
 
 namespace ApiEscapeRank.Controladores
 {
@@ -132,53 +134,76 @@ namespace ApiEscapeRank.Controladores
         [HttpPost]
         public async Task<ActionResult> PostPartida(PartidaRequest req)
         {
-            Partida partidaNueva = new Partida
+
+            string Imagen = await GestionarFoto(req.Foto);
+            if (!string.IsNullOrEmpty(Imagen))
             {
-                Minutos = req.Minutos,
-                Segundos = req.Segundos,
-                SalaId = req.Sala.Id,
-                EquipoId = req.Equipo.Id,
-                Fecha = req.Fecha.Value,
-                Imagen = await GestionarFoto(req.Foto)
-        };
-
-
-        List<Usuario> miembros = await _contexto.GetUsuariosEquipo(req.Equipo.Id)
-                .Include(p=>p.Perfil).ToListAsync();
-
-            foreach (Usuario miembro in miembros)
-            {
-                if(miembro.Perfil != null)
+                Partida partidaNueva = new Partida
                 {
-                    miembro.Perfil.NumeroPartidas += 1;
+                    Minutos = req.Minutos,
+                    Segundos = req.Segundos,
+                    SalaId = req.Sala.Id,
+                    EquipoId = req.Equipo.Id,
+                    Fecha = req.Fecha.Value,
+                    Imagen = Imagen
 
-                    if (int.Parse(req.Minutos) == int.Parse(req.Sala.Duracion) && int.Parse(req.Segundos) == 0
-                        || int.Parse(req.Minutos) < int.Parse(req.Sala.Duracion))
+                };
+
+
+
+
+
+
+                List<Usuario> miembros = await _contexto.GetUsuariosEquipo(req.Equipo.Id)
+                        .Include(p => p.Perfil).ToListAsync();
+
+                foreach (Usuario miembro in miembros)
+                {
+                    if (miembro.Perfil != null)
                     {
-                        miembro.Perfil.PartidasGanadas += 1;
-                    }
-                    else
-                    {
-                        miembro.Perfil.PartidasPerdidas += 1;
+                        miembro.Perfil.NumeroPartidas += 1;
+
+                        if (int.Parse(req.Minutos) == int.Parse(req.Sala.Duracion) && int.Parse(req.Segundos) == 0
+                            || int.Parse(req.Minutos) < int.Parse(req.Sala.Duracion))
+                        {
+                            miembro.Perfil.PartidasGanadas += 1;
+                        }
+                        else
+                        {
+                            miembro.Perfil.PartidasPerdidas += 1;
+                        }
                     }
                 }
+
+                _contexto.Entry(req.Equipo).State = EntityState.Modified;
+
+                _contexto.Partidas.Add(partidaNueva);
+
+                Noticia noti = CrearNoticiaPartida(req, miembros,Imagen);
+
+                if (noti != null)
+                {
+                    _contexto.Noticias.Add(noti);
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+                try
+                {
+                    await _contexto.SaveChangesAsync();
+
+                    return Ok();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
-
-            _contexto.Entry(req.Equipo).State = EntityState.Modified;
-
-            _contexto.Partidas.Add(partidaNueva);
-
-            _contexto.Noticias.Add(await CrearNoticiaPartida(req, miembros));
-
-            try
+            else
             {
-                await _contexto.SaveChangesAsync();
-
-                return Ok();
-            }
-            catch (Exception)
-            {
-                throw;
+                return NoContent();
             }
         }
 
@@ -207,55 +232,79 @@ namespace ApiEscapeRank.Controladores
 
         private async Task<string> GestionarFoto(byte[] foto)
         {
-            string imagen = null;
+            string nombre = null;
+
+            bool result = false;
 
             if (foto != null && foto.Length > 0)
             {
-                imagen = DateTime.Now.Ticks.ToString() + ".jpg";
-
-                string rutaFotos = _configuration.GetSection("AppSettings").GetSection("RutaImagenesPartidas").Value;
-
-                await System.IO.File.WriteAllBytesAsync(_env.ContentRootPath + rutaFotos + imagen, foto);
+                nombre = DateTime.Now.Ticks.ToString() + ".jpg";
+#if DEBUG
+                if (!result)
+                {
+                    string rutaFotos = _configuration.GetSection("AppSettings").GetSection("RutaImagenesPartidasLocal").Value;
+                    try
+                    {
+                        await System.IO.File.WriteAllBytesAsync(_env.ContentRootPath + rutaFotos + imagen, foto);
+                    }
+                    catch
+                    {
+                        imagen = "";
+                    }
+                }
             }
-
-            return imagen;
+#else
+                result = await StorageHelper.PostFotoAStorage(_configuration, foto, nombre);
+            }
+            if (!result)
+            {
+                nombre = "";
+            }
+#endif
+            return nombre;
         }
 
-        private async Task<Noticia> CrearNoticiaPartida(PartidaRequest req, List<Usuario> miembros)
+        private Noticia CrearNoticiaPartida(PartidaRequest req, List<Usuario> miembros,string imagen)
         {
-            string imagen = await GestionarFoto(req.Foto);
-
-            string cadenaMiembros = "";
-
-            for (int i = 0;i < miembros.Count;i++)
+            if (!string.IsNullOrEmpty(imagen))
             {
-                cadenaMiembros += miembros[i].Perfil.Nombre;
+                string cadenaMiembros = "";
 
-                if (i == miembros.Count - 2)
+                for (int i = 0; i < miembros.Count; i++)
                 {
-                    cadenaMiembros += " y ";
+                    cadenaMiembros += miembros[i].Nick;
+
+                    if (i == miembros.Count - 2)
+                    {
+                        cadenaMiembros += " y ";
+                    }
+                    else if (i == miembros.Count - 1)
+                    {
+                        cadenaMiembros += " ";
+                    }
+                    else
+                    {
+                        cadenaMiembros += ", ";
+                    }
                 }
-                else if(i == miembros.Count - 1)
+
+                Noticia noticia = new Noticia
                 {
-                    cadenaMiembros += " ";
-                }
-                else
-                {
-                    cadenaMiembros += ", ";
-                }
+                    Imagen = imagen,
+                    Titular = "Se ha jugado en " + req.Sala.Nombre,
+                    TextoCorto = "El equipo: " + req.Equipo.Nombre + " ha jugado una nueva partida en " + req.Sala.Companyia.Ciudad.Nombre + ".",
+                    TextoLargo = "¡" + cadenaMiembros + "han realizado un tiempo de " + req.Minutos + " minutos con " + req.Segundos + " segundos! " +
+                    "Los equipos de EscapeRank y " + req.Sala.Companyia.Nombre + " os estamos muy agradecidos.",
+                    EquipoId = req.Equipo.Id
+                };
+
+                return noticia;
             }
-
-            Noticia noticia = new Noticia
+            else
             {
-                Imagen = imagen,
-                Titular = "Se ha jugado en " + req.Sala.Nombre,
-                TextoCorto = "El equipo: " + req.Equipo.Nombre + " ha jugado una nueva partida en " + req.Sala.Companyia.Ciudad.Nombre + ".",
-                TextoLargo = "¡" + cadenaMiembros + "han realizado un tiempo de " + req.Minutos + " minutos con " + req.Segundos + " segundos! " +
-                "Los equipos de EscapeRank y " + req.Sala.Companyia.Nombre + " os estamos muy agradecidos.",
-                EquipoId = req.Equipo.Id
-            };
-
-            return noticia;
+                return null;
+            }
         }
+
     }
 }
