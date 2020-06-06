@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
+
 namespace ApiEscapeRank.Controladores
 {
     [Authorize]
@@ -20,7 +25,10 @@ namespace ApiEscapeRank.Controladores
             _contexto = contexto;
         }
 
-        // GET: api/ciudades
+        /// <summary>Obtener todas las ciudades</summary>
+        /// <response code="200">Ciudades devueltas</response>
+        /// <response code="404">No se encuentran ciudades</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet]
         public async Task<ActionResult<List<Ciudad>>> GetCiudades()
         {
@@ -34,7 +42,11 @@ namespace ApiEscapeRank.Controladores
             return ciudades;
         }
 
-        // GET: api/ciudades/5
+        /// <summary>Obtener una ciudad por su id</summary>
+        /// <param name="id">Id de ciudad</param>
+        /// <response code="200">Ciudad devuelta</response>
+        /// <response code="404">No se encuentra ciudad</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<Ciudad>> GetCiudad(string id)
         {
@@ -48,7 +60,13 @@ namespace ApiEscapeRank.Controladores
             return Ok(ciudad);
         }
 
-        // PUT: api/ciudades/5
+        /// <summary>Modificar una ciudad por su id</summary>
+        /// <param name="id">Id de ciudad a modificar</param>
+        /// <param name="ciudad">Ciudad modificada</param>
+        /// <response code="200">Ciudad modificada</response>
+        /// <response code="400">Parámetros incorrectos</response>
+        /// <response code="404">No se encuentra ciudad</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPut("{id}")]
         public async Task<ActionResult> PutCiudad(string id, Ciudad ciudad)
         {
@@ -78,7 +96,11 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/ciudades
+        /// <summary>Añadir una nueva ciudad</summary>
+        /// <param name="ciudad">Ciudad</param>
+        /// <response code="200">Ciudad añadida</response>
+        /// <response code="409">Ciudad ya existente</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPost]
         public async Task<ActionResult<Ciudad>> PostCiudad(Ciudad ciudad)
         {
@@ -102,7 +124,11 @@ namespace ApiEscapeRank.Controladores
             return CreatedAtAction("GetCiudades", new { id = ciudad.Id }, ciudad);
         }
 
-        // DELETE: api/ciudades/5
+        /// <summary>Borrar una ciudad</summary>
+        /// <param name="id">Id de ciudad</param>
+        /// <response code="200">Ciudad borrada</response>
+        /// <response code="404">No se encuentra ciudad</response>
+        /// <response code="500">Error de servidor</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Ciudad>> DeleteCiudad(string id)
         {
@@ -119,6 +145,7 @@ namespace ApiEscapeRank.Controladores
             return ciudad;
         }
 
+        //Comprobar si existe una ciudad
         private bool CiudadExists(string id)
         {
             return _contexto.Ciudades.Any(e => e.Id == id);

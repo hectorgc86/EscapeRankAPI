@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
+
 namespace ApiEscapeRank.Controladores
 {
     [Authorize]
@@ -20,7 +25,10 @@ namespace ApiEscapeRank.Controladores
             _contexto = contexto;
         }
 
-        // GET: api/noticias
+        /// <summary>Obtener todas las noticias</summary>
+        /// <response code="200">Noticias devueltos</response>
+        /// <response code="404">No se encuentran noticias</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet]
         public async Task<ActionResult<List<Noticia>>> GetNoticias()
         {
@@ -34,7 +42,11 @@ namespace ApiEscapeRank.Controladores
             return noticias;
         }
 
-        // GET: api/noticias/usuario/5
+        /// <summary>Obtener todas las noticias de un usuario</summary>
+        /// <param name="id">Id de usuario</param>
+        /// <response code="200">Noticias de usuario devueltas</response>
+        /// <response code="404">No se encuentran noticias</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("usuario/{id}")]
         public async Task<ActionResult<List<Noticia>>> GetNoticiasUsuario(int id)
         {
@@ -50,7 +62,11 @@ namespace ApiEscapeRank.Controladores
             }
         }
 
-        // GET: api/noticias/5
+        /// <summary>Obtener una noticia por su id</summary>
+        /// <param name="id">Id de noticia</param>
+        /// <response code="200">Noticia devuelta</response>
+        /// <response code="404">No se encuentra noticia</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<Noticia>> GetNoticia(int id)
         {
@@ -64,7 +80,13 @@ namespace ApiEscapeRank.Controladores
             return noticia;
         }
 
-        // PUT: api/noticias/5
+        /// <summary>Modificar una noticia por su id</summary>
+        /// <param name="id">Id de noticia a modificar</param>
+        /// <param name="noticia">Noticia modificada</param>
+        /// <response code="200">Noticia modificada</response>
+        /// <response code="400">Parámetros incorrectos</response>
+        /// <response code="404">No se encuentra noticia</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPut("{id}")]
         public async Task<ActionResult> PutNoticia(int id, Noticia noticia)
         {
@@ -94,7 +116,11 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/noticias
+        /// <summary>Añadir una nueva noticia</summary>
+        /// <param name="noticia">Noticia</param>
+        /// <response code="200">Noticia añadida</response>
+        /// <response code="409">Noticia ya existente</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPost]
         public async Task<ActionResult<Noticia>> PostNoticia(Noticia noticia)
         {
@@ -104,11 +130,15 @@ namespace ApiEscapeRank.Controladores
             return CreatedAtAction("GetNoticias", new { id = noticia.Id }, noticia);
         }
 
-        // DELETE: api/noticias/5
+        /// <summary>Borrar una noticia</summary>
+        /// <param name="id">Id de noticia</param>
+        /// <response code="200">Noticia borrada</response>
+        /// <response code="404">No se encuentra noticia</response>
+        /// <response code="500">Error de servidor</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Noticia>> DeleteNoticia(int id)
         {
-            var noticia = await _contexto.Noticias.FindAsync(id);
+            Noticia noticia = await _contexto.Noticias.FindAsync(id);
             if (noticia == null)
             {
                 return NotFound();
@@ -120,6 +150,7 @@ namespace ApiEscapeRank.Controladores
             return noticia;
         }
 
+        //Comprobar si existe una noticia
         private bool NoticiaExists(int id)
         {
             return _contexto.Noticias.Any(e => e.Id == id);

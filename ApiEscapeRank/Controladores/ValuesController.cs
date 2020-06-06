@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using ApiEscapeRank.Modelos;
+
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
 
 namespace ApiEscapeRank.Controladores
 {
@@ -8,7 +12,7 @@ namespace ApiEscapeRank.Controladores
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        // GET api/values
+        /// <summary>Llamada por defecto en la carga de la API</summary>
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {

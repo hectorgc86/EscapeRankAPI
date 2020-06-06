@@ -2,7 +2,7 @@
   "profiles": {
     "ApiEscapeRank": {
       "commandName": "Project",
-      "launchUrl": "api/values",
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

@@ -1,6 +1,11 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
+
 namespace ApiEscapeRank.Modelos
 {
     public partial class Sala

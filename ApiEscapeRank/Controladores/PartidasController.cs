@@ -1,16 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiEscapeRank.Helpers;
 using ApiEscapeRank.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using ApiEscapeRank.Helpers;
-using Microsoft.Extensions.Options;
+
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
 
 namespace ApiEscapeRank.Controladores
 {
@@ -30,7 +33,10 @@ namespace ApiEscapeRank.Controladores
             _configuration = configuration;
         }
 
-        // GET: api/partidas
+        /// <summary>Obtener todas las partidas</summary>
+        /// <response code="200">Partidas devueltas</response>
+        /// <response code="404">No se encuentran partidas</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet]
         public async Task<ActionResult<List<Partida>>> GetPartidas()
         {
@@ -44,7 +50,11 @@ namespace ApiEscapeRank.Controladores
             return partidas;
         }
 
-        // GET: api/partidas/usuario/5
+        /// <summary>Obtener todas las partidas de un usuario</summary>
+        /// <param name="id">Id de usuario</param>
+        /// <response code="200">Partidas de usuario devueltas</response>
+        /// <response code="404">No se encuentran partidas</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("usuario/{id}")]
         public async Task<ActionResult<List<Partida>>> GetPartidasUsuario(int id)
         {
@@ -58,7 +68,11 @@ namespace ApiEscapeRank.Controladores
             return partidasUsuario;
         }
 
-        // GET: api/partidas/equipo/5
+        /// <summary>Obtener todas las partidas de un equipo</summary>
+        /// <param name="id">Id de equipo</param>
+        /// <response code="200">Partidas de equipo devueltas</response>
+        /// <response code="404">No se encuentran partidas</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("equipo/{id}")]
         public async Task<ActionResult<List<Partida>>> GetPartidasEquipo(int id)
         {
@@ -72,7 +86,11 @@ namespace ApiEscapeRank.Controladores
             return partidasEquipo;
         }
 
-        // GET: api/partidas/sala/5
+        /// <summary>Obtener todas las partidas jugadas en una sala</summary>
+        /// <param name="id">Id de sala</param>
+        /// <response code="200">Partidas en sala devueltas</response>
+        /// <response code="404">No se encuentran partidas</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("sala/{id}")]
         public async Task<ActionResult<List<Partida>>> GetPartidasSala(string id)
         {
@@ -86,7 +104,11 @@ namespace ApiEscapeRank.Controladores
             return partidasSala;
         }
 
-        // GET: api/partidas/5
+        /// <summary>Obtener una partida por su id</summary>
+        /// <param name="id">Id de partida</param>
+        /// <response code="200">Partida devuelta</response>
+        /// <response code="404">No se encuentra partida</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<Partida>> GetPartida(int id)
         {
@@ -100,7 +122,13 @@ namespace ApiEscapeRank.Controladores
             return partida;
         }
 
-        // PUT: api/partidas/5
+        /// <summary>Modificar una partida por su id</summary>
+        /// <param name="id">Id de partida a modificar</param>
+        /// <param name="partida">Partida modificada</param>
+        /// <response code="200">Partida modificada</response>
+        /// <response code="400">Parámetros incorrectos</response>
+        /// <response code="404">No se encuentra partida</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPut("{id}")]
         public async Task<ActionResult> PutPartida(int id, Partida partida)
         {
@@ -130,7 +158,11 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/partidas
+        /// <summary>Añadir una nueva partida</summary>
+        /// <param name="req">Partida</param>
+        /// <response code="200">Partida añadida</response>
+        /// <response code="409">Partida ya existente</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPost]
         public async Task<ActionResult> PostPartida(PartidaRequest req)
         {
@@ -148,11 +180,6 @@ namespace ApiEscapeRank.Controladores
                     Imagen = Imagen
 
                 };
-
-
-
-
-
 
                 List<Usuario> miembros = await _contexto.GetUsuariosEquipo(req.Equipo.Id)
                         .Include(p => p.Perfil).ToListAsync();
@@ -207,7 +234,11 @@ namespace ApiEscapeRank.Controladores
             }
         }
 
-        // DELETE: api/Partidas/5
+        /// <summary>Borrar una partida</summary>
+        /// <param name="id">Id de partida</param>
+        /// <response code="200">Partida borrada</response>
+        /// <response code="404">No se encuentra partida</response>
+        /// <response code="500">Error de servidor</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeletePartida(int id)
         {
@@ -224,12 +255,13 @@ namespace ApiEscapeRank.Controladores
             return Ok();
         }
 
+        //Comprobar una la partida existe
         private bool PartidaExists(int id)
         {
             return _contexto.Partidas.Any(e => e.Id == id);
         }
 
-
+        //Gestionar foto de la partida la partida
         private async Task<string> GestionarFoto(byte[] foto)
         {
             string nombre = null;
@@ -245,11 +277,11 @@ namespace ApiEscapeRank.Controladores
                     string rutaFotos = _configuration.GetSection("AppSettings").GetSection("RutaImagenesPartidasLocal").Value;
                     try
                     {
-                        await System.IO.File.WriteAllBytesAsync(_env.ContentRootPath + rutaFotos + imagen, foto);
+                        await System.IO.File.WriteAllBytesAsync(_env.ContentRootPath + rutaFotos + nombre, foto);
                     }
                     catch
                     {
-                        imagen = "";
+                        nombre = "";
                     }
                 }
             }
@@ -264,6 +296,7 @@ namespace ApiEscapeRank.Controladores
             return nombre;
         }
 
+        //Crear una noticia sobre una partida
         private Noticia CrearNoticiaPartida(PartidaRequest req, List<Usuario> miembros,string imagen)
         {
             if (!string.IsNullOrEmpty(imagen))

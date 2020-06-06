@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
+
 namespace ApiEscapeRank.Controladores
 {
     [Authorize]
@@ -20,14 +25,21 @@ namespace ApiEscapeRank.Controladores
             _contexto = contexto;
         }
 
-        // GET: api/perfiles
+        /// <summary>Obtener todos los perfiles</summary>
+        /// <response code="200">Perfiles devueltos</response>
+        /// <response code="404">No se encuentran perfiles</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet]
         public async Task<ActionResult<List<Perfil>>> GetPerfiles()
         {
             return await _contexto.Perfiles.ToListAsync();
         }
 
-        // GET: api/perfiles/usuario/5/
+        /// <summary>Obtener perfil de un usuario</summary>
+        /// <param name="id">Id de usuario</param>
+        /// <response code="200">Perfil de usuario devuelto</response>
+        /// <response code="404">No se encuentra perfil</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("usuario/{id}")]
         public async Task<ActionResult<Perfil>> GetPerfilUsuario(int id)
         {
@@ -45,7 +57,11 @@ namespace ApiEscapeRank.Controladores
             }
         }
 
-        // GET: api/perfiles/5
+        /// <summary>Obtener un perfil por su id</summary>
+        /// <param name="id">Id de perfil</param>
+        /// <response code="200">Perfil devuelto</response>
+        /// <response code="404">No se encuentra perfil</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<Perfil>> GetPerfil(int id)
         {
@@ -59,7 +75,13 @@ namespace ApiEscapeRank.Controladores
             return perfil;
         }
 
-        // PUT: api/perfiles/5
+        /// <summary>Modificar un perfil por su id</summary>
+        /// <param name="id">Id de perfil a modificar</param>
+        /// <param name="perfil">Perfil modificado</param>
+        /// <response code="200">Perfil modificado</response>
+        /// <response code="400">Parámetros incorrectos</response>
+        /// <response code="404">No se encuentra perfil</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPut("{id}")]
         public async Task<ActionResult> PutPerfil(int id, Perfil perfil)
         {
@@ -89,7 +111,11 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/perfiles
+        /// <summary>Añadir un nuevo perfil</summary>
+        /// <param name="perfil">Perfil</param>
+        /// <response code="200">Perfil añadido</response>
+        /// <response code="409">Perfil ya existente</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPost]
         public async Task<ActionResult<Perfil>> PostPerfil(Perfil perfil)
         {
@@ -99,7 +125,11 @@ namespace ApiEscapeRank.Controladores
             return CreatedAtAction("GetPerfiles", new { id = perfil.Id }, perfil);
         }
 
-        // DELETE: api/perfiles/5
+        /// <summary>Borrar un perfil</summary>
+        /// <param name="id">Id de perfil</param>
+        /// <response code="200">Perfil borrado</response>
+        /// <response code="404">No se encuentra perfil</response>
+        /// <response code="500">Error de servidor</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Perfil>> DeletePerfil(int id)
         {
@@ -115,6 +145,7 @@ namespace ApiEscapeRank.Controladores
             return perfil;
         }
 
+        //Comprobar si existe un perfil
         private bool PerfilExists(int id)
         {
             return _contexto.Perfiles.Any(e => e.Id == id);

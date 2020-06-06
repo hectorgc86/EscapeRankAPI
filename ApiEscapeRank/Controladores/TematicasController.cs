@@ -6,6 +6,11 @@ using ApiEscapeRank.Modelos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
+
 namespace ApiEscapeRank.Controladores
 {
     [Authorize]
@@ -20,7 +25,10 @@ namespace ApiEscapeRank.Controladores
             _contexto = contexto;
         }
 
-        // GET: api/Tematicas
+        /// <summary>Obtener todas las temáticas</summary>
+        /// <response code="200">Temáticas devueltas</response>
+        /// <response code="404">No se encuentran temáticas</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet]
         public async Task<ActionResult<List<Tematica>>> GetTematicas()
         {
@@ -34,7 +42,11 @@ namespace ApiEscapeRank.Controladores
             return tematicas;
         }
 
-        // GET: api/Tematicas/5
+        /// <summary>Obtener una temática por su id</summary>
+        /// <param name="id">Id de temática</param>
+        /// <response code="200">Temática devuelta</response>
+        /// <response code="404">No se encuentra temática</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<Tematica>> GetTematica(string id)
         {
@@ -48,7 +60,13 @@ namespace ApiEscapeRank.Controladores
             return tematica;
         }
 
-        // PUT: api/Tematicas/5
+        /// <summary>Modificar una temática por su id</summary>
+        /// <param name="id">Id de temática a modificar</param>
+        /// <param name="tematica">Temática modificada    </param>
+        /// <response code="200">Temática modificada</response>
+        /// <response code="400">Parámetros incorrectos</response>
+        /// <response code="404">No se encuentra temática</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTematica(string id, Tematica tematica)
         {
@@ -78,7 +96,11 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/Tematicas
+        /// <summary>Añadir una nueva temática</summary>
+        /// <param name="tematica">Temática</param>
+        /// <response code="200">Temática añadida</response>
+        /// <response code="409">Temática ya existente</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPost]
         public async Task<ActionResult<Tematica>> PostTematica(Tematica tematica)
         {
@@ -102,7 +124,11 @@ namespace ApiEscapeRank.Controladores
             return CreatedAtAction("GetTematicas", new { id = tematica.Id }, tematica);
         }
 
-        // DELETE: api/Tematicas/5
+        /// <summary>Borrar una temática</summary>
+        /// <param name="id">Id de temática</param>
+        /// <response code="200">Temática borrada</response>
+        /// <response code="404">No se encuentra temática</response>
+        /// <response code="500">Error de servidor</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Tematica>> DeleteTematica(string id)
         {
@@ -118,6 +144,7 @@ namespace ApiEscapeRank.Controladores
             return tematica;
         }
 
+        //Comprobar si existe temática
         private bool TematicaExists(string id)
         {
             return _contexto.Tematicas.Any(e => e.Id == id);

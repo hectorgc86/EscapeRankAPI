@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
+
 namespace ApiEscapeRank.Controladores
 {
     [Authorize]
@@ -20,7 +25,10 @@ namespace ApiEscapeRank.Controladores
             _contexto = contexto;
         }
 
-        // GET: api/dificultades
+        /// <summary>Obtener todas las dificultades</summary>
+        /// <response code="200">Dificultades devueltas</response>
+        /// <response code="404">No se encuentran dificultades</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet]
         public async Task<ActionResult<List<Dificultad>>> GetDificultades()
         {
@@ -34,7 +42,11 @@ namespace ApiEscapeRank.Controladores
             return dificultades;
         }
 
-        // GET: api/dificultades/5
+        /// <summary>Obtener una dificultad por su id</summary>
+        /// <param name="id">Id de dificultad</param>
+        /// <response code="200">Dificultad devuelta</response>
+        /// <response code="404">No se encuentra dificultad</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<Dificultad>> GetDificultad(string id)
         {
@@ -48,7 +60,13 @@ namespace ApiEscapeRank.Controladores
             return dificultad;
         }
 
-        // PUT: api/dificultades/5
+        /// <summary>Modificar una dificultad por su id</summary>
+        /// <param name="id">Id de dificultad a modificar</param>
+        /// <param name="dificultad">Dificultad modificada</param>
+        /// <response code="200">Dificultad modificada</response>
+        /// <response code="400">Parámetros incorrectos</response>
+        /// <response code="404">No se encuentra dificultad</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPut("{id}")]
         public async Task<ActionResult> PutDificultad(string id, Dificultad dificultad)
         {
@@ -78,7 +96,11 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/dificultades
+        /// <summary>Añadir una nueva dificultad</summary>
+        /// <param name="dificultad">Dificultad</param>
+        /// <response code="200">Dificultad añadida</response>
+        /// <response code="409">Dificultad ya existente</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPost]
         public async Task<ActionResult<Dificultad>> PostDificultades(Dificultad dificultad)
         {
@@ -102,7 +124,11 @@ namespace ApiEscapeRank.Controladores
             return CreatedAtAction("GetDificultades", new { id = dificultad.Id }, dificultad);
         }
 
-        // DELETE: api/dificultades/5
+        /// <summary>Borrar una dificultad</summary>
+        /// <param name="id">Id de dificultad</param>
+        /// <response code="200">Dificultad borrada</response>
+        /// <response code="404">No se encuentra dificultad</response>
+        /// <response code="500">Error de servidor</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Dificultad>> DeleteDificultad(string id)
         {
@@ -118,6 +144,7 @@ namespace ApiEscapeRank.Controladores
             return dificultad;
         }
 
+        //Comprobar si existe una dificultad
         private bool DificultadExists(string id)
         {
             return _contexto.Dificultades.Any(e => e.Id == id);

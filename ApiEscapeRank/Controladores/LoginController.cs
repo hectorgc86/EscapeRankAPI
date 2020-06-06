@@ -8,6 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
+
 namespace ApiEscapeRank.Controladores
 {
     [Authorize]
@@ -24,7 +29,12 @@ namespace ApiEscapeRank.Controladores
             _configuration = configuration;
         }
 
-        // POST: api/login
+        /// <summary>Iniciar sesión</summary>
+        /// <param name="req">Datos para hacer login</param>
+        /// <param name="nocript">En true se pude probar request con contraseña no encriptada</param>
+        /// <response code="200">Devuelve id de usuario y token generado</response>
+        /// <response code="400">Datos de login incorrectos</response>
+        /// <response code="500">Error de servidor</response>
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult> PostLogin([FromBody]LoginRequest req,[FromHeader] bool nocript)
@@ -56,7 +66,11 @@ namespace ApiEscapeRank.Controladores
             }
         }
 
-        // POST: api/registro
+        /// <summary>Registrar nuevo usuario</summary>
+        ///<param name="req">Usuario</param>
+        /// <response code="200">Devuelve confirmación</response>
+        /// <response code="409">Usuario ya existente</response>
+        /// <response code="500">Error de servidor</response>
         [AllowAnonymous]
         [HttpPost("registro")]
         public async Task<ActionResult<Login>> PostRegistro([FromBody]UsuarioRequest req)
@@ -92,7 +106,7 @@ namespace ApiEscapeRank.Controladores
             }
             catch (DbUpdateException)
             {
-                if (RegistroExists(usuario.Email))
+                if (RegistroExists(usuario))
                 {
                     return Conflict();
                 }
@@ -103,11 +117,14 @@ namespace ApiEscapeRank.Controladores
             }
         }
 
-        private bool RegistroExists(string email)
+        //Comprobar si existe un usuario
+        private bool RegistroExists(Usuario usuario)
         {
-            return _contexto.Usuarios.Any(e => e.Email == email);
+            return _contexto.Usuarios.Any(e => e.Email == usuario.Email || e.Nick == usuario.Nick );
         }
 
+        /* Encriptar contraseña (usado solo al poner nocript a true en login para poder probarlo desde postman y swagger
+        sin tener que introducir una contraseña encriptada */
         public static string CalcularMD5(string contrasenya)
         {
             MD5 md5 = MD5.Create();

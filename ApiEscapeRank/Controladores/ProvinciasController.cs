@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
+
 namespace ApiEscapeRank.Controladores
 {
     [Authorize]
@@ -20,14 +25,21 @@ namespace ApiEscapeRank.Controladores
             _contexto = contexto;
         }
 
-        // GET: api/provincias
+        /// <summary>Obtener todas las provincias</summary>
+        /// <response code="200">Provincias devueltas</response>
+        /// <response code="404">No se encuentran provincias</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet]
         public async Task<ActionResult<List<Provincia>>> GetProvincias()
         {
             return await _contexto.Provincias.ToListAsync();
         }
 
-        // GET: api/provincias/5
+        /// <summary>Obtener una provincia por su id</summary>
+        /// <param name="id">Id de provincia</param>
+        /// <response code="200">Provincia devuelta</response>
+        /// <response code="404">No se encuentra provincia</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<Provincia>> GetProvincia(string id)
         {
@@ -41,7 +53,13 @@ namespace ApiEscapeRank.Controladores
             return provincia;
         }
 
-        // PUT: api/Provincias/5
+        /// <summary>Modificar una provincia por su id</summary>
+        /// <param name="id">Id de provincia a modificar</param>
+        /// <param name="provincia">Provincia modificada</param>
+        /// <response code="200">Provincia modificada</response>
+        /// <response code="400">Parámetros incorrectos</response>
+        /// <response code="404">No se encuentra provincia</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProvincia(string id, Provincia provincia)
         {
@@ -71,7 +89,11 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/Provincias
+        /// <summary>Añadir una nueva provincia</summary>
+        /// <param name="provincia">Provincia</param>
+        /// <response code="200">Provincia añadida</response>
+        /// <response code="409">Provincia ya existente</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPost]
         public async Task<ActionResult<Provincia>> PostProvincia(Provincia provincia)
         {
@@ -95,7 +117,11 @@ namespace ApiEscapeRank.Controladores
             return CreatedAtAction("GetProvincias", new { id = provincia.Id }, provincia);
         }
 
-        // DELETE: api/Provincias/5
+        /// <summary>Borrar una provincia</summary>
+        /// <param name="id">Id de provincia</param>
+        /// <response code="200">Provincia borrada</response>
+        /// <response code="404">No se encuentra provincia</response>
+        /// <response code="500">Error de servidor</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Provincia>> DeleteProvincia(string id)
         {
@@ -111,6 +137,7 @@ namespace ApiEscapeRank.Controladores
             return provincia;
         }
 
+        //Comprobar si una provincia existe
         private bool ProvinciaExists(string id)
         {
             return _contexto.Provincias.Any(e => e.Id == id);

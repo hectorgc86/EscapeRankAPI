@@ -1,21 +1,21 @@
 ﻿<Properties StartupConfiguration="{8E920263-834C-481F-A5E1-752F212BFA61}|Default">
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="ApiEscapeRank/Controladores/CompanyiasController.cs">
+    <Files>
+      <File FileName="ApiEscapeRank/Controladores/CompanyiasController.cs" Line="1" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="ApiEscapeRank" selected="True" />
+          <Node name="ApiEscapeRank" expanded="True" selected="True" />
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.ApiEscapeRank PreferredExecutionTarget="/Applications/Safari.app" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/hectorgc86/DAM2/Proyecto final ciclo/ApiEscapeRank/ApiEscapeRank/Controladores/EquiposController.cs" relfile="ApiEscapeRank/Controladores/EquiposController.cs" line="78" column="1" />
-      <Breakpoint file="/Users/hectorgc86/DAM2/Proyecto final ciclo/ApiEscapeRank/ApiEscapeRank/Controladores/NoticiasController.cs" relfile="ApiEscapeRank/Controladores/NoticiasController.cs" line="41" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>

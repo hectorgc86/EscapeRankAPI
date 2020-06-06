@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
+
 namespace ApiEscapeRank.Controladores
 {
     [Authorize]
@@ -20,7 +25,10 @@ namespace ApiEscapeRank.Controladores
             _contexto = contexto;
         }
 
-        // GET: api/Publico
+        /// <summary>Obtener todos los públicos</summary>
+        /// <response code="200">Públicos devueltos</response>
+        /// <response code="404">No se encuentran públicos</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet]
         public async Task<ActionResult<List<Publico>>> GetPublico()
         {
@@ -34,7 +42,11 @@ namespace ApiEscapeRank.Controladores
             return publicos;
         }
 
-        // GET: api/Publico/5
+        /// <summary>Obtener un público por su id</summary>
+        /// <param name="id">Id de público</param>
+        /// <response code="200">Publico devuelto</response>
+        /// <response code="404">No se encuentra público</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<Publico>> GetPublico(string id)
         {
@@ -48,7 +60,13 @@ namespace ApiEscapeRank.Controladores
             return publico;
         }
 
-        // PUT: api/Publico/5
+        /// <summary>Modificar un público por su id</summary>
+        /// <param name="id">Id de público a modificar</param>
+        /// <param name="público">Público modificado</param>
+        /// <response code="200">Público modificado</response>
+        /// <response code="400">Parámetros incorrectos</response>
+        /// <response code="404">No se encuentra público</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPublico(string id, Publico publico)
         {
@@ -78,7 +96,11 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/Publico
+        /// <summary>Añadir un nuevo público</summary>
+        /// <param name="publico">Público</param>
+        /// <response code="200">Público añadido</response>
+        /// <response code="409">Público ya existente</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPost]
         public async Task<ActionResult<Publico>> PostPublico(Publico publico)
         {
@@ -102,7 +124,11 @@ namespace ApiEscapeRank.Controladores
             return CreatedAtAction("GetPublico", new { id = publico.Id }, publico);
         }
 
-        // DELETE: api/Publico/5
+        /// <summary>Borrar un público</summary>
+        /// <param name="id">Id de público</param>
+        /// <response code="200">Público borrada</response>
+        /// <response code="404">No se encuentra público</response>
+        /// <response code="500">Error de servidor</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Publico>> DeletePublico(string id)
         {
@@ -118,6 +144,7 @@ namespace ApiEscapeRank.Controladores
             return publico;
         }
 
+        //Comprobar si un público existe
         private bool PublicoExists(string id)
         {
             return _contexto.Publico.Any(e => e.Id == id);

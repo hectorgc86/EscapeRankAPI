@@ -5,6 +5,11 @@ using System.Data.Common;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
+
 namespace ApiEscapeRank.Modelos
 {
     public partial class MySQLDbcontext : BaseDbContext

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,6 +5,11 @@ using ApiEscapeRank.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
 
 namespace ApiEscapeRank.Controladores
 {
@@ -21,7 +25,10 @@ namespace ApiEscapeRank.Controladores
             _contexto = contexto;
         }
 
-        // GET: api/equipos
+        /// <summary>Obtener todos los equipos</summary>
+        /// <response code="200">Equipos devueltos</response>
+        /// <response code="404">No se encuentran equipos</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet]
         public async Task<ActionResult<List<Equipo>>> GetEquipos()
         {
@@ -35,7 +42,11 @@ namespace ApiEscapeRank.Controladores
             return equipos;
         }
 
-        // GET: api/equipos/usuario/5
+        /// <summary>Obtener todos los equipos a los que un usuario pertenece</summary>
+        /// <param name="id">Id de usuario</param>
+        /// <response code="200">Equipos de usuario devueltos</response>
+        /// <response code="404">No se encuentran equipos</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("usuario/{id}")]
         public async Task<ActionResult<List<Equipo>>> GetEquiposUsuario(int id)
         {
@@ -52,7 +63,11 @@ namespace ApiEscapeRank.Controladores
             }
         }
 
-        // GET: api/equipos/5
+        /// <summary>Obtener un equipo por su id</summary>
+        /// <param name="id">Id de equipo</param>
+        /// <response code="200">Equipo devuelto</response>
+        /// <response code="404">No se encuentra equipo</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<Equipo>> GetEquipo(int id)
         {
@@ -66,7 +81,13 @@ namespace ApiEscapeRank.Controladores
             return equipo;
         }
 
-        // PUT: api/equipos/5
+        /// <summary>Modificar un equipo por su id</summary>
+        /// <param name="id">Id de equipo a modificar</param>
+        /// <param name="equipo">Equipo modificado</param>
+        /// <response code="200">Equipo modificado</response>
+        /// <response code="400">Parámetros incorrectos</response>
+        /// <response code="404">No se encuentra equipo</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPut("{id}")]
         public async Task<ActionResult> PutEquipo(int id, Equipo equipo)
         {
@@ -96,7 +117,11 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/equipos
+        /// <summary>Añadir un nuevo equipo</summary>
+        /// <param name="req">Equipo</param>
+        /// <response code="200">Equipo añadido</response>
+        /// <response code="409">Equipo ya existente</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPost]
         public async Task<ActionResult> PostEquipo(EquipoRequest req)
         {
@@ -135,7 +160,11 @@ namespace ApiEscapeRank.Controladores
 
         }
 
-        // DELETE: api/equipos/5
+        /// <summary>Borrar un equipo</summary>
+        /// <param name="id">Id de equipo</param>
+        /// <response code="200">Equipo borrado</response>
+        /// <response code="404">No se encuentra equipo</response>
+        /// <response code="500">Error de servidor</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteEquipo(int id)
         {
@@ -160,6 +189,7 @@ namespace ApiEscapeRank.Controladores
             return Ok();
         }
 
+        //Comprobar si existe un equipo
         private bool EquipoExists(int id)
         {
             return _contexto.Equipos.Any(e => e.Id == id);

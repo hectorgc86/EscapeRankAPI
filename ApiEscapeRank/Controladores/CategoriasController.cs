@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+/* Héctor Granja Cortés
+ * 2ºDAM Semipresencial
+ * Proyecto fin de ciclo
+   EscapeRank API */
+
 namespace ApiEscapeRank.Controladores
 {
     [Authorize]
@@ -20,7 +25,10 @@ namespace ApiEscapeRank.Controladores
             _contexto = contexto;
         }
 
-        // GET: api/categorias
+        /// <summary>Obtener todas las categorías</summary>
+        /// <response code="200">Categorías devueltas</response>
+        /// <response code="404">No se encuentran categorías</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet]
         public async Task<ActionResult<List<Categoria>>> GetCategorias()
         {
@@ -34,7 +42,11 @@ namespace ApiEscapeRank.Controladores
             return categorias;
         }
 
-        // GET: api/categorias/5
+        /// <summary>Obtener una categoría por su id</summary>
+        /// <param name="id">Id de categoría</param>
+        /// <response code="200">Categoría devuelta</response>
+        /// <response code="404">No se encuentra categoría</response>
+        /// <response code="500">Error de servidor</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<Categoria>> GetCategoria(string id)
         {
@@ -48,7 +60,13 @@ namespace ApiEscapeRank.Controladores
             return categoria;
         }
 
-        // PUT: api/categorias/5
+        /// <summary>Modificar una categoría por su id</summary>
+        /// <param name="id">Id de categoría a modificar</param>
+        /// <param name="categoria">Categoría modificada    </param>
+        /// <response code="200">Categoría modificada</response>
+        /// <response code="400">Parámetros incorrectos</response>
+        /// <response code="404">No se encuentra categoría</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPut("{id}")]
         public async Task<ActionResult> PutCategoria(string id, Categoria categoria)
         {
@@ -78,7 +96,11 @@ namespace ApiEscapeRank.Controladores
             return NoContent();
         }
 
-        // POST: api/categorias
+        /// <summary>Añadir una nueva categoría</summary>
+        /// <param name="categoria">Categoría</param>
+        /// <response code="200">Categoría añadida</response>
+        /// <response code="409">Categoría ya existente</response>
+        /// <response code="500">Error de servidor</response>
         [HttpPost]
         public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
         {
@@ -103,7 +125,11 @@ namespace ApiEscapeRank.Controladores
             return CreatedAtAction("GetCategoria", new { id = categoria.Id }, categoria);
         }
 
-        // DELETE: api/categorias/5
+        /// <summary>Borrar una categoría</summary>
+        /// <param name="id">Id de categoría</param>
+        /// <response code="200">Categoría borrada</response>
+        /// <response code="404">No se encuentra categoría</response>
+        /// <response code="500">Error de servidor</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Categoria>> DeleteCategoria(string id)
         {
@@ -120,6 +146,7 @@ namespace ApiEscapeRank.Controladores
             return categoria;
         }
 
+        //Comprobar si existe una categoría
         private bool CategoriaExists(string id)
         {
             return _contexto.Categorias.Any(e => e.Id == id);
