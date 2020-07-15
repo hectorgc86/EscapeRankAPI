@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
  * Proyecto fin de ciclo
    EscapeRank API */
 
-namespace ApiEscapeRank.Modelos
+namespace EscapeRankAPI.Modelos
 {
     public partial class MySQLDbcontext : BaseDbContext
     {

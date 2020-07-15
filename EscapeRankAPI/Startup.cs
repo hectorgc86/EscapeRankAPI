@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
-using ApiEscapeRank.Modelos;
+using EscapeRankAPI.Modelos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +17,7 @@ using Newtonsoft.Json;
  * Proyecto fin de ciclo
    EscapeRank API */
 
-namespace ApiEscapeRank
+namespace EscapeRankAPI
 {
     public class Startup
     {

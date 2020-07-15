@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
  * Proyecto fin de ciclo
    EscapeRank API */
 
-namespace ApiEscapeRank.Controladores
+namespace EscapeRankAPI.Controladores
 {
     [Route("api/[controller]")]
     [ApiController]

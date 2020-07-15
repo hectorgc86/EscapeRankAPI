@@ -1,4 +1,4 @@
-﻿namespace ApiEscapeRank
+﻿namespace EscapeRankAPI
 {
     public class SwaggerConfiguration
     {

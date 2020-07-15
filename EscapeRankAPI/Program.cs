@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Hosting;
  * Proyecto fin de ciclo
    EscapeRank API */
 
-namespace ApiEscapeRank
+namespace EscapeRankAPI
 {
     public class Program
     {

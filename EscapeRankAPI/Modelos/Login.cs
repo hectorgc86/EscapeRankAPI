@@ -10,7 +10,7 @@ using Microsoft.IdentityModel.Tokens;
  * Proyecto fin de ciclo
    EscapeRank API */
 
-namespace ApiEscapeRank.Modelos
+namespace EscapeRankAPI.Modelos
 {
     public class Login
     {

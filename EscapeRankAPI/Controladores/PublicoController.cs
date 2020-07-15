@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ApiEscapeRank.Modelos;
+using EscapeRankAPI.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
  * Proyecto fin de ciclo
    EscapeRank API */
 
-namespace ApiEscapeRank.Controladores
+namespace EscapeRankAPI.Controladores
 {
     [Authorize]
     [Route("api/[controller]")]

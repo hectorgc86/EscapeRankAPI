@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace ApiEscapeRank.Helpers
+namespace EscapeRankAPI.Helpers
 {
     public static class StorageHelper
     {
