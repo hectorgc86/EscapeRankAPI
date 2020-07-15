@@ -1,0 +1,697 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ApiEscapeRank</name>
+    </assembly>
+    <members>
+        <member name="M:ApiEscapeRank.Controladores.CategoriasController.GetCategorias">
+            <summary>Obtener todas las categorías</summary>
+            <response code="200">Categorías devueltas</response>
+            <response code="404">No se encuentran categorías</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CategoriasController.GetCategoria(System.String)">
+            <summary>Obtener una categoría por su id</summary>
+            <param name="id">Id de categoría</param>
+            <response code="200">Categoría devuelta</response>
+            <response code="404">No se encuentra categoría</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CategoriasController.PutCategoria(System.String,ApiEscapeRank.Modelos.Categoria)">
+            <summary>Modificar una categoría por su id</summary>
+            <param name="id">Id de categoría a modificar</param>
+            <param name="categoria">Categoría modificada    </param>
+            <response code="200">Categoría modificada</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra categoría</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CategoriasController.PostCategoria(ApiEscapeRank.Modelos.Categoria)">
+            <summary>Añadir una nueva categoría</summary>
+            <param name="categoria">Categoría</param>
+            <response code="200">Categoría añadida</response>
+            <response code="409">Categoría ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CategoriasController.DeleteCategoria(System.String)">
+            <summary>Borrar una categoría</summary>
+            <param name="id">Id de categoría</param>
+            <response code="200">Categoría borrada</response>
+            <response code="404">No se encuentra categoría</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CiudadesController.GetCiudades">
+            <summary>Obtener todas las ciudades</summary>
+            <response code="200">Ciudades devueltas</response>
+            <response code="404">No se encuentran ciudades</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CiudadesController.GetCiudad(System.String)">
+            <summary>Obtener una ciudad por su id</summary>
+            <param name="id">Id de ciudad</param>
+            <response code="200">Ciudad devuelta</response>
+            <response code="404">No se encuentra ciudad</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CiudadesController.PutCiudad(System.String,ApiEscapeRank.Modelos.Ciudad)">
+            <summary>Modificar una ciudad por su id</summary>
+            <param name="id">Id de ciudad a modificar</param>
+            <param name="ciudad">Ciudad modificada</param>
+            <response code="200">Ciudad modificada</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra ciudad</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CiudadesController.PostCiudad(ApiEscapeRank.Modelos.Ciudad)">
+            <summary>Añadir una nueva ciudad</summary>
+            <param name="ciudad">Ciudad</param>
+            <response code="200">Ciudad añadida</response>
+            <response code="409">Ciudad ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CiudadesController.DeleteCiudad(System.String)">
+            <summary>Borrar una ciudad</summary>
+            <param name="id">Id de ciudad</param>
+            <response code="200">Ciudad borrada</response>
+            <response code="404">No se encuentra ciudad</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CompanyiasController.GetCompanyias">
+            <summary>Obtener todas las compañías</summary>
+            <response code="200">Compañías devueltas</response>
+            <response code="404">No se encuentran compañías</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CompanyiasController.GetCompanyia(System.String)">
+            <summary>Obtener una compañía por su id</summary>
+            <param name="id">Id de compañía</param>
+            <response code="200">Compañía devuelta</response>
+            <response code="404">No se encuentra compañía</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CompanyiasController.PutCompanyia(System.String,ApiEscapeRank.Modelos.Companyia)">
+            <summary>Modificar una compañía por su id</summary>
+            <param name="id">Id de compañía a modificar</param>
+            <param name="companyias">Compañía modificada</param>
+            <response code="200">Compañía modificada</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra compañía</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CompanyiasController.PostCompanyia(ApiEscapeRank.Modelos.Companyia)">
+            <summary>Añadir una nueva compañía</summary>
+            <param name="companyia">Compañía</param>
+            <response code="200">Compañía añadida</response>
+            <response code="409">Compañía ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.CompanyiasController.DeleteCompanyia(System.String)">
+            <summary>Borrar una compañía</summary>
+            <param name="id">Id de compañía</param>
+            <response code="200">Compañía borrada</response>
+            <response code="404">No se encuentra compañía</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.DificultadesController.GetDificultades">
+            <summary>Obtener todas las dificultades</summary>
+            <response code="200">Dificultades devueltas</response>
+            <response code="404">No se encuentran dificultades</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.DificultadesController.GetDificultad(System.String)">
+            <summary>Obtener una dificultad por su id</summary>
+            <param name="id">Id de dificultad</param>
+            <response code="200">Dificultad devuelta</response>
+            <response code="404">No se encuentra dificultad</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.DificultadesController.PutDificultad(System.String,ApiEscapeRank.Modelos.Dificultad)">
+            <summary>Modificar una dificultad por su id</summary>
+            <param name="id">Id de dificultad a modificar</param>
+            <param name="dificultad">Dificultad modificada</param>
+            <response code="200">Dificultad modificada</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra dificultad</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.DificultadesController.PostDificultades(ApiEscapeRank.Modelos.Dificultad)">
+            <summary>Añadir una nueva dificultad</summary>
+            <param name="dificultad">Dificultad</param>
+            <response code="200">Dificultad añadida</response>
+            <response code="409">Dificultad ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.DificultadesController.DeleteDificultad(System.String)">
+            <summary>Borrar una dificultad</summary>
+            <param name="id">Id de dificultad</param>
+            <response code="200">Dificultad borrada</response>
+            <response code="404">No se encuentra dificultad</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.EquiposController.GetEquipos">
+            <summary>Obtener todos los equipos</summary>
+            <response code="200">Equipos devueltos</response>
+            <response code="404">No se encuentran equipos</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.EquiposController.GetEquiposUsuario(System.Int32)">
+            <summary>Obtener todos los equipos a los que un usuario pertenece</summary>
+            <param name="id">Id de usuario</param>
+            <response code="200">Equipos de usuario devueltos</response>
+            <response code="404">No se encuentran equipos</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.EquiposController.GetEquipo(System.Int32)">
+            <summary>Obtener un equipo por su id</summary>
+            <param name="id">Id de equipo</param>
+            <response code="200">Equipo devuelto</response>
+            <response code="404">No se encuentra equipo</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.EquiposController.PutEquipo(System.Int32,ApiEscapeRank.Modelos.Equipo)">
+            <summary>Modificar un equipo por su id</summary>
+            <param name="id">Id de equipo a modificar</param>
+            <param name="equipo">Equipo modificado</param>
+            <response code="200">Equipo modificado</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra equipo</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.EquiposController.PostEquipo(ApiEscapeRank.Modelos.EquipoRequest)">
+            <summary>Añadir un nuevo equipo</summary>
+            <param name="req">Equipo</param>
+            <response code="200">Equipo añadido</response>
+            <response code="409">Equipo ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.EquiposController.DeleteEquipo(System.Int32)">
+            <summary>Borrar un equipo</summary>
+            <param name="id">Id de equipo</param>
+            <response code="200">Equipo borrado</response>
+            <response code="404">No se encuentra equipo</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.LoginController.PostLogin(ApiEscapeRank.Modelos.LoginRequest,System.Boolean)">
+            <summary>Iniciar sesión</summary>
+            <param name="req">Datos para hacer login</param>
+            <param name="nocript">En true se pude probar request con contraseña no encriptada</param>
+            <response code="200">Devuelve id de usuario y token generado</response>
+            <response code="400">Datos de login incorrectos</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.LoginController.PostRegistro(ApiEscapeRank.Modelos.UsuarioRequest)">
+             <summary>Registrar nuevo usuario</summary>
+            <param name="req">Usuario</param>
+             <response code="200">Devuelve confirmación</response>
+             <response code="409">Usuario ya existente</response>
+             <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.NoticiasController.GetNoticias">
+            <summary>Obtener todas las noticias</summary>
+            <response code="200">Noticias devueltos</response>
+            <response code="404">No se encuentran noticias</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.NoticiasController.GetNoticiasUsuario(System.Int32)">
+            <summary>Obtener todas las noticias de un usuario</summary>
+            <param name="id">Id de usuario</param>
+            <response code="200">Noticias de usuario devueltas</response>
+            <response code="404">No se encuentran noticias</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.NoticiasController.GetNoticia(System.Int32)">
+            <summary>Obtener una noticia por su id</summary>
+            <param name="id">Id de noticia</param>
+            <response code="200">Noticia devuelta</response>
+            <response code="404">No se encuentra noticia</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.NoticiasController.PutNoticia(System.Int32,ApiEscapeRank.Modelos.Noticia)">
+            <summary>Modificar una noticia por su id</summary>
+            <param name="id">Id de noticia a modificar</param>
+            <param name="noticia">Noticia modificada</param>
+            <response code="200">Noticia modificada</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra noticia</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.NoticiasController.PostNoticia(ApiEscapeRank.Modelos.Noticia)">
+            <summary>Añadir una nueva noticia</summary>
+            <param name="noticia">Noticia</param>
+            <response code="200">Noticia añadida</response>
+            <response code="409">Noticia ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.NoticiasController.DeleteNoticia(System.Int32)">
+            <summary>Borrar una noticia</summary>
+            <param name="id">Id de noticia</param>
+            <response code="200">Noticia borrada</response>
+            <response code="404">No se encuentra noticia</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PartidasController.GetPartidas">
+            <summary>Obtener todas las partidas</summary>
+            <response code="200">Partidas devueltas</response>
+            <response code="404">No se encuentran partidas</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PartidasController.GetPartidasUsuario(System.Int32)">
+            <summary>Obtener todas las partidas de un usuario</summary>
+            <param name="id">Id de usuario</param>
+            <response code="200">Partidas de usuario devueltas</response>
+            <response code="404">No se encuentran partidas</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PartidasController.GetPartidasEquipo(System.Int32)">
+            <summary>Obtener todas las partidas de un equipo</summary>
+            <param name="id">Id de equipo</param>
+            <response code="200">Partidas de equipo devueltas</response>
+            <response code="404">No se encuentran partidas</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PartidasController.GetPartidasSala(System.String)">
+            <summary>Obtener todas las partidas jugadas en una sala</summary>
+            <param name="id">Id de sala</param>
+            <response code="200">Partidas en sala devueltas</response>
+            <response code="404">No se encuentran partidas</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PartidasController.GetPartida(System.Int32)">
+            <summary>Obtener una partida por su id</summary>
+            <param name="id">Id de partida</param>
+            <response code="200">Partida devuelta</response>
+            <response code="404">No se encuentra partida</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PartidasController.PutPartida(System.Int32,ApiEscapeRank.Modelos.Partida)">
+            <summary>Modificar una partida por su id</summary>
+            <param name="id">Id de partida a modificar</param>
+            <param name="partida">Partida modificada</param>
+            <response code="200">Partida modificada</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra partida</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PartidasController.PostPartida(ApiEscapeRank.Modelos.PartidaRequest)">
+            <summary>Añadir una nueva partida</summary>
+            <param name="req">Partida</param>
+            <response code="200">Partida añadida</response>
+            <response code="409">Partida ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PartidasController.DeletePartida(System.Int32)">
+            <summary>Borrar una partida</summary>
+            <param name="id">Id de partida</param>
+            <response code="200">Partida borrada</response>
+            <response code="404">No se encuentra partida</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PerfilesController.GetPerfiles">
+            <summary>Obtener todos los perfiles</summary>
+            <response code="200">Perfiles devueltos</response>
+            <response code="404">No se encuentran perfiles</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PerfilesController.GetPerfilUsuario(System.Int32)">
+            <summary>Obtener perfil de un usuario</summary>
+            <param name="id">Id de usuario</param>
+            <response code="200">Perfil de usuario devuelto</response>
+            <response code="404">No se encuentra perfil</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PerfilesController.GetPerfil(System.Int32)">
+            <summary>Obtener un perfil por su id</summary>
+            <param name="id">Id de perfil</param>
+            <response code="200">Perfil devuelto</response>
+            <response code="404">No se encuentra perfil</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PerfilesController.PutPerfil(System.Int32,ApiEscapeRank.Modelos.Perfil)">
+            <summary>Modificar un perfil por su id</summary>
+            <param name="id">Id de perfil a modificar</param>
+            <param name="perfil">Perfil modificado</param>
+            <response code="200">Perfil modificado</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra perfil</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PerfilesController.PostPerfil(ApiEscapeRank.Modelos.Perfil)">
+            <summary>Añadir un nuevo perfil</summary>
+            <param name="perfil">Perfil</param>
+            <response code="200">Perfil añadido</response>
+            <response code="409">Perfil ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PerfilesController.DeletePerfil(System.Int32)">
+            <summary>Borrar un perfil</summary>
+            <param name="id">Id de perfil</param>
+            <response code="200">Perfil borrado</response>
+            <response code="404">No se encuentra perfil</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.ProvinciasController.GetProvincias">
+            <summary>Obtener todas las provincias</summary>
+            <response code="200">Provincias devueltas</response>
+            <response code="404">No se encuentran provincias</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.ProvinciasController.GetProvincia(System.String)">
+            <summary>Obtener una provincia por su id</summary>
+            <param name="id">Id de provincia</param>
+            <response code="200">Provincia devuelta</response>
+            <response code="404">No se encuentra provincia</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.ProvinciasController.PutProvincia(System.String,ApiEscapeRank.Modelos.Provincia)">
+            <summary>Modificar una provincia por su id</summary>
+            <param name="id">Id de provincia a modificar</param>
+            <param name="provincia">Provincia modificada</param>
+            <response code="200">Provincia modificada</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra provincia</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.ProvinciasController.PostProvincia(ApiEscapeRank.Modelos.Provincia)">
+            <summary>Añadir una nueva provincia</summary>
+            <param name="provincia">Provincia</param>
+            <response code="200">Provincia añadida</response>
+            <response code="409">Provincia ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.ProvinciasController.DeleteProvincia(System.String)">
+            <summary>Borrar una provincia</summary>
+            <param name="id">Id de provincia</param>
+            <response code="200">Provincia borrada</response>
+            <response code="404">No se encuentra provincia</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PublicoController.GetPublico">
+            <summary>Obtener todos los públicos</summary>
+            <response code="200">Públicos devueltos</response>
+            <response code="404">No se encuentran públicos</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PublicoController.GetPublico(System.String)">
+            <summary>Obtener un público por su id</summary>
+            <param name="id">Id de público</param>
+            <response code="200">Publico devuelto</response>
+            <response code="404">No se encuentra público</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PublicoController.PutPublico(System.String,ApiEscapeRank.Modelos.Publico)">
+            <summary>Modificar un público por su id</summary>
+            <param name="id">Id de público a modificar</param>
+            <param name="público">Público modificado</param>
+            <response code="200">Público modificado</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra público</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PublicoController.PostPublico(ApiEscapeRank.Modelos.Publico)">
+            <summary>Añadir un nuevo público</summary>
+            <param name="publico">Público</param>
+            <response code="200">Público añadido</response>
+            <response code="409">Público ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.PublicoController.DeletePublico(System.String)">
+            <summary>Borrar un público</summary>
+            <param name="id">Id de público</param>
+            <response code="200">Público borrada</response>
+            <response code="404">No se encuentra público</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.SalasController.GetSalas(System.Int32,System.String)">
+            <summary>Obtener todas las salas en base a paginado y búsqueda coincidente</summary>
+            <param name="busqueda">Cadena de búsqueda</param>
+            <param name="offset">Valor de paginado</param>
+            <response code="200">Salas devueltas</response>
+            <response code="404">No se encuentran salas</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.SalasController.GetSalasPromocionadas(System.Int32)">
+            <summary>Obtener todas las salas promocionadas en base a paginado</summary>
+            <param name="offset">Valor de paginado</param>
+            <response code="200">Salas devueltas</response>
+            <response code="404">No se encuentran salas</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.SalasController.GetSalasCategoria(System.String,System.Int32,System.String)">
+            <summary>Obtener todas las salas de una categoría en base a su paginado y búsqueda coincidente</summary>
+            <param name="id">Id de categoría</param>
+            <param name="busqueda">Cadena de búsqueda</param>
+            <param name="offset">Valor de paginado</param>
+            <response code="200">Salas devueltas</response>
+            <response code="404">No se encuentran salas</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.SalasController.GetSalasTematica(System.String,System.Int32,System.String)">
+            <summary>Obtener todas las salas de una temática en base a su paginado y búsqueda coincidente</summary>
+            <param name="id">Id de temática</param>
+            <param name="busqueda">Cadena de búsqueda</param>
+            <param name="offset">Valor de paginado</param>
+            <response code="200">Salas devueltas</response>
+            <response code="404">No se encuentran salas</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.SalasController.GetSalasPublico(System.String,System.Int32,System.String)">
+            <summary>Obtener todas las salas de un público en base a su paginado y búsqueda coincidente</summary>
+            <param name="id">Id de público</param>
+            <param name="busqueda">Cadena de búsqueda</param>
+            <param name="offset">Valor de paginado</param>
+            <response code="200">Salas devueltas</response>
+            <response code="404">No se encuentran salas</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.SalasController.GetSalasDificultad(System.String,System.Int32,System.String)">
+            <summary>Obtener todas las salas de una dificultad en base a su paginado y búsqueda coincidente</summary>
+            <param name="id">Id de dificultad</param>
+            <param name="busqueda">Cadena de búsqueda</param>
+            <param name="offset">Valor de paginado</param>
+            <response code="200">Salas devueltas</response>
+            <response code="404">No se encuentran salas</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.SalasController.GetSala(System.String)">
+            <summary>Obtener una sala por su id</summary>
+            <param name="id">Id de sala</param>
+            <response code="200">Sala devuelta</response>
+            <response code="404">No se encuentra sala</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.SalasController.PutSala(System.String,ApiEscapeRank.Modelos.Sala)">
+            <summary>Modificar una sala por su id</summary>
+            <param name="id">Id de sala a modificar</param>
+            <param name="sala">Sala modificada</param>
+            <response code="200">Sala modificada</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra sala</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.SalasController.PostSala(ApiEscapeRank.Modelos.Sala)">
+            <summary>Añadir una sala</summary>
+            <param name="sala">Sala</param>
+            <response code="200">Sala añadida</response>
+            <response code="409">Sala ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.SalasController.DeleteSala(System.String)">
+            <summary>Borrar una sala</summary>
+            <param name="id">Id de sala</param>
+            <response code="200">Sala borrada</response>
+            <response code="404">No se encuentra sala</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.TematicasController.GetTematicas">
+            <summary>Obtener todas las temáticas</summary>
+            <response code="200">Temáticas devueltas</response>
+            <response code="404">No se encuentran temáticas</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.TematicasController.GetTematica(System.String)">
+            <summary>Obtener una temática por su id</summary>
+            <param name="id">Id de temática</param>
+            <response code="200">Temática devuelta</response>
+            <response code="404">No se encuentra temática</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.TematicasController.PutTematica(System.String,ApiEscapeRank.Modelos.Tematica)">
+            <summary>Modificar una temática por su id</summary>
+            <param name="id">Id de temática a modificar</param>
+            <param name="tematica">Temática modificada    </param>
+            <response code="200">Temática modificada</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra temática</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.TematicasController.PostTematica(ApiEscapeRank.Modelos.Tematica)">
+            <summary>Añadir una nueva temática</summary>
+            <param name="tematica">Temática</param>
+            <response code="200">Temática añadida</response>
+            <response code="409">Temática ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.TematicasController.DeleteTematica(System.String)">
+            <summary>Borrar una temática</summary>
+            <param name="id">Id de temática</param>
+            <response code="200">Temática borrada</response>
+            <response code="404">No se encuentra temática</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.UsuariosController.GetUsuarios">
+            <summary>Obtener todos los usuarios</summary>
+            <response code="200">Usuarios devueltos</response>
+            <response code="404">No se encuentran usuarios</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.UsuariosController.GetUsuariosEquipo(System.Int32)">
+            <summary>Obtener todos los usuarios de un equipo</summary>
+            <param name="id">Id de equipo</param>
+            <response code="200">Usuarios de equipo devueltos</response>
+            <response code="404">No se encuentran usuarios</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.UsuariosController.GetUsuario(System.Int32)">
+            <summary>Obtener un usuario por su id</summary>
+            <param name="id">Id de usuario</param>
+            <response code="200">Usuario devuelto</response>
+            <response code="404">No se encuentra usuario</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.UsuariosController.GetAmigosUsuario(System.Int32)">
+            <summary>Obtener todos los amigos de un usuario</summary>
+            <param name="id">Id de usuario</param>
+            <response code="200">Amigos de usuario devueltos</response>
+            <response code="404">No se encuentran amigos</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.UsuariosController.PostUsuario(ApiEscapeRank.Modelos.Usuario)">
+            <summary>Añadir un nuevo usuario</summary>
+            <param name="usuario">Usuario</param>
+            <response code="200">Usuario añadido</response>
+            <response code="409">Usuario ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.UsuariosController.PostAmigo(System.Int32,System.String)">
+            <summary>Mandar solicitud amistad</summary>
+            <param name="usuarioId">Id de usuario que envia solicitud</param>
+            <param name="emailAmigo">Email de usuario que recibe solicitud</param>
+            <response code="200">Solicitud enviada</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">Usuario destino no encontrado</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.UsuariosController.PutUsuario(System.Int32,ApiEscapeRank.Modelos.Usuario)">
+            <summary>Modificar un usuario por su id</summary>
+            <param name="id">Id de usuario a modificar</param>
+            <param name="usuario">Usuario modificado</param>
+            <response code="200">Usuario modificado</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra usuario</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.UsuariosController.PutAmigo(System.Int32,System.Int32)">
+            <summary>Aceptar solicitud de amistad</summary>
+            <param name="usuarioId">Id de usuario a aceptar</param>
+            <param name="amigoId">Id de usuario que acepta</param>
+            <response code="200">Solicitud aceptada</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra solicitud amistad</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.UsuariosController.DeleteUsuario(System.Int32)">
+            <summary>Borrar un usuario</summary>
+            <param name="id">Id de usuario</param>
+            <response code="200">Usuario borrado</response>
+            <response code="404">No se encuentra usuario</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.UsuariosController.DeleteAmigo(System.Int32,System.Int32)">
+            <summary>Borrar una amistad</summary>
+            <param name="usuarioId">Id de usuario</param>
+            <param name="amigoId">Id de amigo</param>
+            <response code="200">Amistad borrada</response>
+            <response code="404">No se encuentra amistad</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.ValoracionesController.GetValoraciones">
+            <summary>Obtener todas las valoraciones</summary>
+            <response code="200">Valoraciones devueltas</response>
+            <response code="404">No se encuentran valoraciones</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.ValoracionesController.GetValoracion(System.Int32)">
+            <summary>Obtener una valoración por su id</summary>
+            <param name="id">Id de valoración</param>
+            <response code="200">Valoración devuelta</response>
+            <response code="404">No se encuentra valoración</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.ValoracionesController.PutValoracion(System.Int32,ApiEscapeRank.Modelos.Valoracion)">
+            <summary>Modificar una valoración por su id</summary>
+            <param name="id">Id de valoración a modificar</param>
+            <param name="valoracion">Valoración modificada</param>
+            <response code="200">Valoración modificada</response>
+            <response code="400">Parámetros incorrectos</response>
+            <response code="404">No se encuentra valoración</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.ValoracionesController.PostValoracion(ApiEscapeRank.Modelos.Valoracion)">
+            <summary>Añadir una nueva valoración</summary>
+            <param name="valoracion">Valoración</param>
+            <response code="200">Valoración añadida</response>
+            <response code="409">Valoración ya existente</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.ValoracionesController.DeleteValoracion(System.Int32)">
+            <summary>Borrar una valoración</summary>
+            <param name="id">Id de valoración</param>
+            <response code="200">Valoración borrada</response>
+            <response code="404">No se encuentra valoración</response>
+            <response code="500">Error de servidor</response>
+        </member>
+        <member name="M:ApiEscapeRank.Controladores.ValuesController.Get">
+            <summary>Llamada por defecto en la carga de la API</summary>
+        </member>
+        <member name="F:ApiEscapeRank.SwaggerConfiguration.EndpointDescription">
+            <summary>
+            <para>EscapeRank API v1</para>
+            </summary>
+        </member>
+        <member name="F:ApiEscapeRank.SwaggerConfiguration.EndpointUrl">
+            <summary>
+            <para>/swagger/v1/swagger.json</para>
+            </summary>
+        </member>
+        <member name="F:ApiEscapeRank.SwaggerConfiguration.ContactName">
+            <summary>
+            <para>Héctor Granja</para>
+            </summary>
+        </member>
+        <member name="F:ApiEscapeRank.SwaggerConfiguration.ContactUrl">
+            <summary>
+            <para>https://github.com/hectorgc86</para>
+            </summary>
+        </member>
+        <member name="F:ApiEscapeRank.SwaggerConfiguration.DocNameV1">
+            <summary>
+            <para>v1</para>
+            </summary>
+        </member>
+        <member name="F:ApiEscapeRank.SwaggerConfiguration.DocInfoTitle">
+            <summary>
+            <para>EscapeRank API</para>
+            </summary>
+        </member>
+        <member name="F:ApiEscapeRank.SwaggerConfiguration.DocInfoVersion">
+            <summary>
+            <para>v1</para>
+            </summary>
+        </member>
+        <member name="F:ApiEscapeRank.SwaggerConfiguration.DocInfoDescription">
+            <summary>
+            <para>Documentación de la API del proyecto fin de ciclo EscapeRank</para>
+            </summary>
+        </member>
+    </members>
+</doc>
