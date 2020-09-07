@@ -255,13 +255,13 @@ namespace EscapeRankAPI.Controladores
             return Ok();
         }
 
-        //Comprobar una la partida existe
+        //Comprobar si la partida existe
         private bool PartidaExists(int id)
         {
             return _contexto.Partidas.Any(e => e.Id == id);
         }
 
-        //Gestionar foto de la partida la partida
+        //Gestionar foto de la partida
         private async Task<string> GestionarFoto(byte[] foto)
         {
             string nombre = null;
@@ -286,11 +286,31 @@ namespace EscapeRankAPI.Controladores
                 }
             }
 #else
-                result = await StorageHelper.PostFotoAStorage(_configuration, foto, nombre);
-            }
-            if (!result)
-            {
-                nombre = "";
+                //Conexión Azure
+
+                /*
+                    result = await StorageHelper.PostFotoAStorage(_configuration, foto, nombre);
+                }
+                if (!result)
+                {
+                    nombre = "";
+                }
+                */
+
+                //Conexión Oracle VM
+
+                if (!result)
+                {
+                    string rutaFotos = _configuration.GetSection("AppSettings").GetSection("RutaImagenesPartidasOracle").Value;
+                    try
+                    {
+                        await System.IO.File.WriteAllBytesAsync(rutaFotos + nombre, foto);
+                    }
+                    catch
+                    {
+                        nombre = "";
+                    }
+                }
             }
 #endif
             return nombre;

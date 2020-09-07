@@ -13,7 +13,7 @@ namespace EscapeRankAPI.Helpers
         {
             string cuenta = configuration.GetSection("StorageSettings").GetSection("Cuenta").Value;
             string clave = configuration.GetSection("StorageSettings").GetSection("Clave").Value;
-            string subruta = configuration.GetSection("AppSettings").GetSection("RutaImagenesPartidasRemota").Value;
+            string subruta = configuration.GetSection("AppSettings").GetSection("RutaImagenesPartidasAzure").Value;
             string conexion = "https://" + cuenta + ".blob.core.windows.net";
 
             Stream stream = new MemoryStream(foto);

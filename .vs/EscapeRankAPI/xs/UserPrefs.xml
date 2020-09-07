@@ -1,19 +1,20 @@
 ﻿<Properties StartupConfiguration="{8E920263-834C-481F-A5E1-752F212BFA61}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="EscapeRankAPI/Controladores/PublicoController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="EscapeRankAPI/appsettings.json">
     <Files>
-      <File FileName="EscapeRankAPI/Controladores/ValuesController.cs" Line="13" Column="51" />
-      <File FileName="EscapeRankAPI/Modelos/Categoria.cs" Line="10" Column="26" />
-      <File FileName="EscapeRankAPI/Controladores/PublicoController.cs" Line="1" Column="1" />
+      <File FileName="EscapeRankAPI/Controladores/CategoriasController.cs" Line="1" Column="1" />
+      <File FileName="EscapeRankAPI/Controladores/CiudadesController.cs" />
+      <File FileName="EscapeRankAPI/Controladores/EquiposController.cs" />
+      <File FileName="EscapeRankAPI/Modelos/Contexto/MySQLDbContext.cs" Line="81" Column="58" />
+      <File FileName="EscapeRankAPI/appsettings.json" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="EscapeRankAPI" expanded="True">
             <Node name="EscapeRankAPI" expanded="True">
-              <Node name="Controladores" expanded="True">
-                <Node name="PublicoController.cs" selected="True" />
-              </Node>
+              <Node name="Controladores" expanded="True" />
               <Node name="Modelos" expanded="True" />
+              <Node name="appsettings.json" selected="True" />
             </Node>
           </Node>
         </State>

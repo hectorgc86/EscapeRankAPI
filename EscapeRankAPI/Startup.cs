@@ -85,7 +85,13 @@ namespace EscapeRankAPI
 #if DEBUG
             string conexion = Configuration.GetSection("AppSettings").GetSection("ConexionLocal").Value;
 #else
-            string conexion = Configuration.GetSection("AppSettings").GetSection("ConexionRemota").Value;
+            //Conexión Azure
+
+            //string conexion = Configuration.GetSection("AppSettings").GetSection("ConexionAzure").Value;
+
+            //Conexión Oracle VM
+
+            string conexion = Configuration.GetSection("AppSettings").GetSection("ConexionOracle").Value;
 #endif
             string secret = Configuration.GetSection("AppSettings").GetSection("Secret").Value;
 
